@@ -21,7 +21,7 @@ class Loader
      * Loading a class file
      * @param $classname
      */
-    public static function load($classname)
+    private static function load($classname)
     {
         //Taking first piece of namespace
         $first_piece = explode('\\', $classname)[0] . '\\';
