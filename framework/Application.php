@@ -11,9 +11,10 @@ class Application
 {
     public function run()
     {
-        $router = new Router(include('../app/config/routes.php'));
+        $config = include('../app/config/config.php');
+        $router = new Router($config['routes']);
 
-        $route = $router->parseRoute($_SERVER['REQUEST_URI']);
+        $route = $router->parseRoute();
 
         print_r($route);
     }

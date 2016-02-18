@@ -26,13 +26,13 @@ class Router
     /**
      * Parses URL
      *
-     * @param $url
+     * @param string $url
      * @return array|null
      */
-    public function parseRoute($url)
+    public function parseRoute($url = '')
     {
         $route_found = null;
-
+        $url = empty($url) ? $_SERVER['REQUEST_URI'] : $url;
         $url = preg_replace('~/$~', '', $url);
 
         foreach (self::$map as $route) {
@@ -43,11 +43,14 @@ class Router
                 // Get assoc array of params:
                 preg_match('~{([\w\d_]+)}~', $route['pattern'], $param_names);
                 $params = array_map('urldecode', $params);
-                $params = array_combine($param_names, $params);
-                array_shift($params); // Get rid of 0 element
+
+                if (!empty($param_names)) {
+                    $params = array_combine($param_names, $params);
+                    array_shift($params); // Get rid of 0 element
+                    $route['params'] = $params;
+                }
 
                 $route_found = $route;
-                $route_found['params'] = $params;
 
                 break;
             }
@@ -66,7 +69,33 @@ class Router
      */
     public function generateRoute($route_name, $params = array())
     {
-        //TODO Make URL generating
+        //TODO Add Exception if the route can not be found
+        $route_found['pattern'] = '/';
+
+        foreach (self::$map as $key => $route) {
+
+            if ($route_name == $key) {
+
+                if (!empty($params)) {
+                    foreach ($params as $param_name => $param) {
+                        $route['pattern'] = preg_replace('~{' . $param_name . '}~', $param, $route['pattern']);
+                    }
+                }
+
+                preg_match('~{([\w\d_]+)}~', $route['pattern'], $param_left);
+
+                if (!empty($param_left)) {
+                    //TODO Add Exception if not all parameters are defined
+                    $route['pattern'] = '/';
+                }
+
+                $route_found = $route;
+
+                break;
+            }
+        }
+
+        return $route_found['pattern'];
     }
 
     /**
