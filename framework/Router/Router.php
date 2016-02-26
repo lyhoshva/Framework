@@ -2,6 +2,8 @@
 
 namespace Framework\Router;
 
+use Framework\Exception\HttpNotFoundException;
+
 /**
  * Class Router
  * @package Framework\Router
@@ -60,17 +62,16 @@ class Router
         return $route_found;
     }
 
+
     /**
-     * Generates URL
-     *
-     * @param $route_name
+     * @param string $route_name
      * @param array $params
      * @return string
+     * @throws HttpNotFoundException
      */
     public function generateRoute($route_name, $params = array())
     {
-        //TODO Add Exception if the route can not be found
-        $route_found['pattern'] = '/';
+        $route_found['pattern'] = null;
 
         foreach (self::$map as $key => $route) {
 
@@ -82,17 +83,20 @@ class Router
                     }
                 }
 
-                preg_match('~{([\w\d_]+)}~', $route['pattern'], $param_left);
+                preg_match('~{([\w\d_]+)}~', $route['pattern'], $param_undefined);
 
-                if (!empty($param_left)) {
-                    //TODO Add Exception if not all parameters are defined
-                    $route['pattern'] = '/';
+                if (!empty($param_undefined)) {
+                    throw new HttpNotFoundException('Not Enough Parameters');
                 }
 
                 $route_found = $route;
 
                 break;
             }
+        }
+
+        if (!$route_found) {
+            throw new HttpNotFoundException('Page Not Found');
         }
 
         return $route_found['pattern'];
