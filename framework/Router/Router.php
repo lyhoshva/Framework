@@ -35,7 +35,11 @@ class Router
     {
         $route_found = null;
         $url = empty($url) ? $_SERVER['REQUEST_URI'] : $url;
-        $url = preg_replace('~/$~', '', $url);
+
+        // Don`t replace slash on route "/"
+        if ($url != '/') {
+            $url = preg_replace('~/$~', '', $url);
+        }
 
         foreach (self::$map as $route) {
             $pattern = $this->prepare($route);

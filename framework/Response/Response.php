@@ -57,7 +57,8 @@ class Response
     /**
      * Sends response headers
      */
-    public function sendHeaders(){
+    public function sendHeaders()
+    {
         header($_SERVER['SERVER_PROTOCOL'].' '.$this->code.' '.self::$httpStatuses[$this->code]);
         foreach($this->headers as $name => $value){
             header(sprintf("%s: %s", $name, $value));
@@ -67,7 +68,17 @@ class Response
     /**
      *  Sends response body
      */
-    public function sendBody(){
+    public function sendBody()
+    {
         echo $this->body;
+    }
+
+    /**
+     *  Sends response headers and body
+     */
+    public function send()
+    {
+        $this->sendHeaders();
+        $this->sendBody();
     }
 }
