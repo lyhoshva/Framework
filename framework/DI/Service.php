@@ -2,7 +2,7 @@
 
 namespace Framework\DI;
 
-class Service
+abstract class Service
 {
     private static $services = array();
 
