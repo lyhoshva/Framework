@@ -3,6 +3,7 @@
 namespace Framework;
 
 use Exception;
+use Framework\DI\Service;
 use Framework\Exception\BadResponseTypeException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\NotAuthException;
@@ -26,12 +27,13 @@ class Application
     public function __construct($config_path)
     {
         $this->config = include($config_path);
+        Service::set('router', new Router($this->config['routes']));
+        Service::set('app', $this);
     }
 
     public function run()
     {
-        //@TODO Move router to Service
-        $router = new Router($this->config['routes']);
+        $router = Service::get('router');
         $route = $router->parseRoute();
         try {
             if (!empty($route)) {
@@ -50,8 +52,7 @@ class Application
 
         } catch(NotAuthException $e) {
             $response = new ResponseRedirect($router->generateRoute('signin'));
-        }
-        catch(Exception $e) {
+        } catch(Exception $e) {
             // Do 500 layout...
             echo $e->getMessage();
         }
