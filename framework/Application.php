@@ -7,7 +7,7 @@ use Framework\DI\Service;
 use Framework\Exception\BadResponseTypeException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\NotAuthException;
-use Framework\Request\Request;
+use Framework\Renderer\Renderer;
 use Framework\Response\Response;
 use Framework\Response\ResponseRedirect;
 use Framework\Router\Router;
@@ -29,7 +29,7 @@ class Application
     {
         $this->config = include($config_path);
         Service::set('router', new Router($this->config['routes']));
-        Service::set('request', new Request());
+        Service::set('renderer', new Renderer($this->config['main_layout']));
         Service::set('app', $this);
     }
 
@@ -39,7 +39,7 @@ class Application
         $route = $router->parseRoute();
         try {
             if (!empty($route)) {
-                $response = self::getResponse($route['controller'], $route['action'], $route['params']);
+                $response = $this->getResponse($route['controller'], $route['action'], $route['params']);
             } else {
                 throw new HttpNotFoundException('Route Not Found');
             }

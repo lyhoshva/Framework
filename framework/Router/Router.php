@@ -11,9 +11,13 @@ use Framework\Exception\HttpNotFoundException;
 class Router
 {
     /**
-     * @var array
+     * @var array Routes map
      */
     protected static $map = array();
+    /**
+     * @var array Contains current route
+     */
+    protected $current_route = array();
 
     /**
      * Router constructor.
@@ -41,7 +45,7 @@ class Router
             $url = preg_replace('~/$~', '', $url);
         }
 
-        foreach (self::$map as $route) {
+        foreach (self::$map as $key => $route) {
             $pattern = $this->prepare($route);
 
             if (preg_match($pattern, $url, $params)) {
@@ -56,18 +60,30 @@ class Router
                     $route['params'] = $params;
                 }
 
-                $route_found = $route;
+                $this->current_route = $route;
+                $this->current_route['_name'] = $key;
 
                 break;
             }
 
         }
 
-        return $route_found;
+        return $this->current_route;
     }
 
+    /**
+     * Returns current route array
+     *
+     * @return array
+     */
+    public function getCurrentRoute()
+    {
+        return $this->current_route;
+    }
 
     /**
+     * Generates url to route
+     *
      * @param string $route_name
      * @param array $params
      * @return string
