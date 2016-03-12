@@ -49,14 +49,13 @@ class Application
             }
 
         } catch(HttpNotFoundException $e) {
-            // Render 404 or just show msg
+            $response = $this->renderError($e);
         } catch(BadResponseTypeException $e) {
-
+            $response = $this->renderError($e);
         } catch(NotAuthException $e) {
             $response = new ResponseRedirect($router->generateRoute('signin'));
         } catch(Exception $e) {
-            // Do 500 layout...
-            echo $e->getMessage();
+            $response = $this->renderError($e);
         }
         $response->send();
     }
@@ -88,5 +87,19 @@ class Application
         }
 
         return $response;
+    }
+
+    /**
+     * Render error view
+     *
+     * @param $e
+     * @return Response
+     */
+    protected function renderError($e)
+    {
+        return new Response(Service::get('renderer')->render($this->config['error_500'], [
+            'code' =>  $e->getCode(),
+            'message' =>  $e->getMessage(),
+        ]));
     }
 }

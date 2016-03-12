@@ -37,7 +37,10 @@ class Controller
      */
     public function redirect($redirect_to, $message = '')
     {
-        //@TODO Add message implementation
+        if ($message) {
+            Service::get('session')->addFlush('info', $message);
+        }
+
         return new ResponseRedirect($redirect_to);
     }
 

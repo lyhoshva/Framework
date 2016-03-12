@@ -41,7 +41,11 @@ class Renderer
             $template = $this->main_layout;
         }
 
-        return $this->render($template, compact('content'), false);
+        $session = Service::get('session');
+        $flush = $session->getFlush();
+        $session->clearFlush();
+
+        return $this->render($template, compact('content', 'flush'), false);
     }
 
     /**
