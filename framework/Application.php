@@ -11,6 +11,7 @@ use Framework\Renderer\Renderer;
 use Framework\Response\Response;
 use Framework\Response\ResponseRedirect;
 use Framework\Router\Router;
+use Framework\Session\Session;
 use ReflectionClass;
 
 /**
@@ -30,6 +31,12 @@ class Application
         $this->config = include($config_path);
         Service::set('router', new Router($this->config['routes']));
         Service::set('renderer', new Renderer($this->config['main_layout']));
+        Service::set('session', new Session());
+        Service::set('db', new \PDO(
+            $this->config['pdo']['dsn'],
+            $this->config['pdo']['user'],
+            $this->config['pdo']['password']
+        ));
         Service::set('app', $this);
     }
 
@@ -68,7 +75,7 @@ class Application
      * @param array $params
      * @return mixed|null
      */
-    protected function getResponse($class, $method, $params = array())
+    public function getResponse($class, $method, $params = array())
     {
         $response = null;
 

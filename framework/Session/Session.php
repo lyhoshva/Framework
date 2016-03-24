@@ -63,17 +63,17 @@ class Session
     }
 
     /**
-     * Returns Flush
+     * Returns Flush messages
      *
      * @return mixed
      */
     public function getFlush()
     {
-        return $_SESSION['flush'];
+        return !empty($_SESSION['flush']) ? $_SESSION['flush'] : array();
     }
 
     /**
-     * Clears Flush
+     * Clears Flush messages
      */
     public function clearFlush()
     {

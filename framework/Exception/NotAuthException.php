@@ -15,7 +15,7 @@ class NotAuthException extends Exception
      */
     public function __construct()
     {
-        $code = 401;
-        $message = 'You are not authorized';
+        $this->code = 401;
+        $this->message = 'You are not authorized';
     }
 }

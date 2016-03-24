@@ -11,11 +11,11 @@ use Loader;
  */
 class Renderer
 {
-    private $title;
-    private $description;
-    private $keywords;
-    private $params = array();
-    private $main_layout = '';
+    protected $title;
+    protected $description;
+    protected $keywords;
+    protected $params = array();
+    protected $main_layout = '';
 
     /**
      * Renderer constructor.
@@ -65,6 +65,9 @@ class Renderer
             return $router->generateRoute($route);
         };
         $route = $router->getCurrentRoute();
+        $include = function($controller, $action, $params) {
+            Service::get('app')->getResponse($controller, $action, $params)->send();
+        };
 
         ob_start();
 
