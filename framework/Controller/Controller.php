@@ -31,6 +31,8 @@ class Controller
     }
 
     /**
+     * Redirect application
+     *
      * @param string $redirect_to
      * @param string $message
      * @return ResponseRedirect
@@ -45,6 +47,8 @@ class Controller
     }
 
     /**
+     * Generate path to route
+     *
      * @param $route
      * @return mixed
      */

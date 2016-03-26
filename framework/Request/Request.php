@@ -19,6 +19,16 @@ class Request
     }
 
     /**
+     * Returns request method
+     *
+     * @return string
+     */
+    public function getUri()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
+
+    /**
      * Checks that REQUEST_METHOD is POST
      *
      * @return bool

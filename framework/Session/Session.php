@@ -18,14 +18,6 @@ class Session
     }
 
     /**
-     * Session destructor.
-     */
-    public function __destruct()
-    {
-        session_destroy();
-    }
-
-    /**
      * @param string $name
      * @param $value
      */
@@ -57,7 +49,7 @@ class Session
      * @param string $type
      * @param $message
      */
-    public function setFlush($type, $message)
+    public function addFlush($type, $message)
     {
         $_SESSION['flush'][$type][] = $message;
     }

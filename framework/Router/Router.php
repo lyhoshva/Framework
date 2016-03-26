@@ -3,6 +3,7 @@
 namespace Framework\Router;
 
 use Framework\Exception\HttpNotFoundException;
+use Framework\Request\Request;
 
 /**
  * Class Router
@@ -38,7 +39,8 @@ class Router
     public function parseRoute($url = '')
     {
         $route_found = null;
-        $url = empty($url) ? $_SERVER['REQUEST_URI'] : $url;
+        $request = new Request();
+        $url = empty($url) ? $request->getUri() : $url;
 
         // Don`t replace slash on route "/"
         if ($url != '/') {
