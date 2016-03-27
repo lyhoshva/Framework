@@ -2,7 +2,9 @@
 
 namespace Framework\Router;
 
+use Framework\DI\Service;
 use Framework\Exception\HttpNotFoundException;
+use Framework\Exception\NotAuthException;
 use Framework\Request\Request;
 
 /**
@@ -35,6 +37,7 @@ class Router
      *
      * @param string $url
      * @return array|null
+     * @throws NotAuthException
      */
     public function parseRoute($url = '')
     {
@@ -51,6 +54,18 @@ class Router
             $pattern = $this->prepare($route);
 
             if (preg_match($pattern, $url, $params)) {
+                $security = Service::get('security');
+                $this->current_route = $route;
+                $this->current_route['_name'] = $key;
+
+                if (isset($route['security'])) {
+                    $roles = $route['security'];
+                    $user_role = $security->isAuthenticated() ? Service::get('security')->getUser()->role : array();
+
+                    if (array_search($user_role, $roles) === false) {
+                        throw new NotAuthException();
+                    }
+                }
 
                 // Get assoc array of params:
                 preg_match('~{([\w\d_]+)}~', $route['pattern'], $param_names);
@@ -59,11 +74,8 @@ class Router
                 if (!empty($param_names)) {
                     $params = array_combine($param_names, $params);
                     array_shift($params); // Get rid of 0 element
-                    $route['params'] = $params;
+                    $this->current_route['params'] = $params;
                 }
-
-                $this->current_route = $route;
-                $this->current_route['_name'] = $key;
 
                 break;
             }
@@ -134,7 +146,7 @@ class Router
     {
         $pattern = $route['pattern'];
 
-        if ($route['_requirements']) {
+        if (!empty($route['_requirements'])) {
             foreach ($route['_requirements'] as $key => $requirement) {
                 $pattern = str_replace('{' . $key . '}', '([' . $requirement . ']+)', $pattern);
             }

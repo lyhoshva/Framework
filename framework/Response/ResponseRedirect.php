@@ -21,6 +21,6 @@ class ResponseRedirect extends Response
 
     public function sendBody()
     {
-        // lock
+        // empty
     }
 }

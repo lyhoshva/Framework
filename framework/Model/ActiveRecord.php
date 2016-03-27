@@ -18,13 +18,6 @@ abstract class ActiveRecord
     protected static $pk = 'id';
 
     /**
-     * Array of database`s fields
-     *
-     * @var array
-     */
-    protected static $fields = array();
-
-    /**
      * Returns model rules
      *
      * @return array
@@ -41,18 +34,16 @@ abstract class ActiveRecord
      */
     public static function getFields()
     {
-        if (empty(static::$fields)) {
             $db = Service::get('db');
             $sql = "SHOW FIELDS FROM " . static::getTable();
             $result = $db->query($sql);
             $result = $result->fetchAll();
 
             foreach ($result as $row) {
-                static::$fields[] = $row['Field'];
+                $fields[] = $row['Field'];
             }
-        }
 
-        return static::$fields;
+        return $fields;
     }
 
     /**
@@ -79,7 +70,7 @@ abstract class ActiveRecord
             });
             $field = strtolower($matches[1]);
 
-            if (array_search($field, $fields)) {
+            if (array_search($field, $fields) !== false) {
                 $db = Service::get('db');
                 $sql = 'SELECT * FROM `' . static::getTable() . '` WHERE `'. $field . '` = :' . $field;
                 $query = $db->prepare($sql);
@@ -130,7 +121,7 @@ abstract class ActiveRecord
     {
         $values = array();
         $db = Service::get('db');
-        $fields = $this->getFields();
+        $fields = static::getFields();
         $add_params = function($sql) use ($fields)
         {
             foreach ($fields as $field) {
@@ -145,7 +136,7 @@ abstract class ActiveRecord
         $sql = $add_params($sql);
 
         foreach ($fields as $field) {
-            $values[':' . $field] = $this->$field;
+            $values[':' . $field] = isset($this->$field) ? $this->$field : null;
         }
 
         $result = $db->prepare($sql);

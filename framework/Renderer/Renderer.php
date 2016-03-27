@@ -44,8 +44,9 @@ class Renderer
         $session = Service::get('session');
         $flush = $session->getFlush();
         $session->clearFlush();
+        $user = Service::get('security')->getUser();
 
-        return $this->render($template, compact('content', 'flush'), false);
+        return $this->render($template, compact('content', 'flush', 'user'), false);
     }
 
     /**
@@ -67,6 +68,9 @@ class Renderer
         $route = $router->getCurrentRoute();
         $include = function($controller, $action, $params) {
             Service::get('app')->getResponse($controller, $action, $params)->send();
+        };
+        $generateToken = function() {
+            echo '<input type="hidden" name="_csrf" value="' .  Service::get('security')->generateToken() . '">';
         };
 
         ob_start();

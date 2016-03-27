@@ -57,8 +57,15 @@ class Request
      */
     public function post($name)
     {
-        //@TODO Add filtration
-        return isset($_POST[$name]) ? $_POST[$name] : null;
+        if (isset ($_POST[$name])) {
+            $var = htmlspecialchars($_POST[$name], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+            if ($name == 'password') {
+                $var = md5($var);
+            }
+        }
+
+        return isset($var) ? $var : null;
     }
 
     /**
@@ -69,8 +76,7 @@ class Request
      */
     public function get($name)
     {
-        //@TODO Add filtration
-        return isset($_GET[$name]) ? $_GET[$name] : null;
+        return isset($_GET[$name]) ? htmlspecialchars($_GET[$name], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') : null;
     }
 
     /**

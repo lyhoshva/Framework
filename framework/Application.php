@@ -6,11 +6,14 @@ use Exception;
 use Framework\DI\Service;
 use Framework\Exception\BadResponseTypeException;
 use Framework\Exception\HttpNotFoundException;
+use Framework\Exception\InvalidTokenException;
 use Framework\Exception\NotAuthException;
 use Framework\Renderer\Renderer;
+use Framework\Request\Request;
 use Framework\Response\Response;
 use Framework\Response\ResponseRedirect;
 use Framework\Router\Router;
+use Framework\Security\Security;
 use Framework\Session\Session;
 use ReflectionClass;
 
@@ -28,25 +31,46 @@ class Application
      */
     public function __construct($config_path)
     {
+        ini_set('display_errors', $this->config == 'dev' ? '1' : '0');
+
         $this->config = include($config_path);
+        Service::set('app', $this);
         Service::set('router', new Router($this->config['routes']));
         Service::set('renderer', new Renderer($this->config['main_layout']));
-        Service::set('session', new Session());
         Service::set('db', new \PDO(
             $this->config['pdo']['dsn'],
             $this->config['pdo']['user'],
             $this->config['pdo']['password']
         ));
-        Service::set('app', $this);
+        Service::set('session', new Session());
+        Service::set('security', new Security());
+
+
     }
 
+    /**
+     * Run the application
+     *
+     * @throws InvalidTokenException
+     * @throws HttpNotFoundException
+     * @throws BadResponseTypeException
+     */
     public function run()
     {
         $router = Service::get('router');
-        $route = $router->parseRoute();
+
         try {
+            $request = new Request();
+            $security = Service::get('security');
+
+            if ($request->isPost() && !($security->validateToken())) {
+                throw new InvalidTokenException();
+            }
+
+            $route = $router->parseRoute();
             if (!empty($route)) {
-                $response = $this->getResponse($route['controller'], $route['action'], $route['params']);
+                $security->clearToken();
+                $response = $this->getResponse($route['controller'], $route['action'], isset($route['params']) ? $route['params'] : array());
             } else {
                 throw new HttpNotFoundException('Route Not Found');
             }
@@ -59,8 +83,11 @@ class Application
             $response = $this->renderError($e);
         } catch(BadResponseTypeException $e) {
             $response = $this->renderError($e);
+        } catch(InvalidTokenException $e) {
+            $response = $this->renderError($e);
         } catch(NotAuthException $e) {
-            $response = new ResponseRedirect($router->generateRoute('signin'));
+            Service::get('session')->returnUrl = $router->getCurrentRoute()['pattern'];
+            $response = new ResponseRedirect($router->generateRoute($this->config['security']['login_route']));
         } catch(Exception $e) {
             $response = $this->renderError($e);
         }
@@ -73,7 +100,7 @@ class Application
      * @param string $class class name
      * @param string $method method name
      * @param array $params
-     * @return mixed|null
+     * @return mixed
      */
     public function getResponse($class, $method, $params = array())
     {
