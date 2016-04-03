@@ -5,7 +5,7 @@
  */
 class Loader
 {
-    public static $instance;
+    private static $instance;
     public static $namespaces;
 
     public static function getInstance()
@@ -21,7 +21,16 @@ class Loader
      * Loading a class file
      * @param $classname
      */
-    private static function load($classname)
+    private function load($classname)
+    {
+        $path = $this->getPath($classname);
+
+        if (file_exists($path)) {
+            include_once($path);
+        }
+    }
+
+    public function getPath($classname)
     {
         //Taking first piece of namespace
         $first_piece = explode('\\', $classname)[0] . '\\';
@@ -35,9 +44,7 @@ class Loader
             $path = __DIR__ . str_replace("\\", "/", $path) . '.php';
         }
 
-        if (file_exists($path)) {
-            include_once($path);
-        }
+        return $path;
     }
 
     /**
