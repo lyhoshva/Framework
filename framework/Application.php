@@ -31,9 +31,10 @@ class Application
      */
     public function __construct($config_path)
     {
+        $this->config = include($config_path);
+
         ini_set('display_errors', $this->config == 'dev' ? '1' : '0');
 
-        $this->config = include($config_path);
         Service::set('app', $this);
         Service::set('router', new Router($this->config['routes']));
         Service::set('renderer', new Renderer($this->config['main_layout']));
