@@ -20,10 +20,22 @@ use Framework\Validation\Validator;
 class PostController extends Controller
 {
 
+    /**
+     * @Route("posts", "/posts")
+     *
+     * @return Response
+     */
     public function indexAction()
     {
         return $this->render('index.html', array('posts' => Post::find('all')));
     }
+
+    /**
+     * @Route("post", "/post/{id}", {id: "\d+"})
+     *
+     * @param $id
+     * @return Response
+     */
 
     public function getPostAction($id)
     {

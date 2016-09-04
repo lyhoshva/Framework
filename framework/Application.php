@@ -36,7 +36,7 @@ class Application
         ini_set('display_errors', $this->config == 'dev' ? '1' : '0');
 
         Service::set('app', $this);
-        Service::set('router', new Router($this->config['routes']));
+        Service::set('router', new Router(Router::getRouteMap()));
         Service::set('renderer', new Renderer($this->config['main_layout']));
         Service::set('db', new \PDO(
             $this->config['pdo']['dsn'],
