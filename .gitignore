@@ -1,3 +1,6 @@
 /app/config
 /app/cache
+/composer.phar
 /.idea
+/vendor/
+!/vendor/framework/

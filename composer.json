@@ -1,0 +1,22 @@
+{
+    "name": "lyhoshva/framework",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lyhoshva Vlad",
+            "email": "lyhoshvavlad@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "doctrine/orm": "*"
+    },
+    "autoload":{
+        "psr-4": {
+            "Framework\\": "vendor/framework",
+            "Blog\\": "src/Blog"
+        }
+    }
+}

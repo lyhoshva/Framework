@@ -94,8 +94,9 @@ class Renderer
      */
     public function getViewPath($view, $classname)
     {
-        $controller_path = Loader::getInstance()->getPath($classname);
-        return str_replace('/Controller/', '/views/', str_replace('Controller.php', '/', $controller_path)) . $view . '.php';
+        $config = Service::get('app')->config;
+        $controller_dir = $config['base_path'] . 'src/' . preg_replace('~Controller$~', '/', $classname);
+        return str_replace(DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR, '/views/', $controller_dir) . $view . '.php';
     }
 
 }
