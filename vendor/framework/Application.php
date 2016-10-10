@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Exception;
 use Framework\DI\Service;
 use Framework\Exception\BadResponseTypeException;
@@ -38,6 +40,10 @@ class Application
         Service::set('app', $this);
         Service::set('router', new Router(Router::getRouteMap()));
         Service::set('renderer', new Renderer($this->config['main_layout']));
+        $isDevMode = ($this->config['mode'] == 'dev');
+        $paths = $this->config['paths_to_entities'];
+        $doctrineConfig = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        Service::set('doctrine', EntityManager::create($this->config['db'], $doctrineConfig));
         Service::set('db', new \PDO(
             $this->config['pdo']['dsn'],
             $this->config['pdo']['user'],

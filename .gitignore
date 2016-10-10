@@ -1,6 +1,6 @@
-/app/config
-/app/cache
+/app/config/config.php
+/app/cache/
 /composer.phar
-/.idea
+/.idea/
 /vendor/
 !/vendor/framework/
