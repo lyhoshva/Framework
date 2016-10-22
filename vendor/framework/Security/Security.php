@@ -3,6 +3,8 @@
 namespace Framework\Security;
 
 use Framework\DI\Service;
+use Framework\Exception\HttpForbiddenException;
+use Framework\Exception\NotAuthException;
 use Framework\Request\Request;
 
 /**
@@ -117,5 +119,47 @@ class Security
         $this->clearToken();
         unset($this->user);
         unset(Service::get('session')->security);
+    }
+
+    /**
+     * Checks whether user has permission to this route
+     * @param array $route current route
+     * @return bool
+     * @throws HttpForbiddenException when user has not permission
+     * @throws NotAuthException when user is not authorized
+     */
+    public function checkRoutePermission(array $route)
+    {
+        if (isset($route['security'])) {
+            $roles = $route['security'];
+
+            if ($this->isAuthenticated()) {
+                if (!$this->checkPermission($roles)) {
+                    throw new HttpForbiddenException('You have not permission for this operation');
+                }
+            } else {
+                throw new NotAuthException();
+            }
+        }
+        
+        return true;
+    }
+
+    /**
+     * Checks whether user has permission
+     * @param array $roles allowed roles
+     * @return bool
+     */
+    public function checkPermission(array $roles)
+    {
+        if ($this->isAuthenticated()) {
+            $user_role = $this->getUser()->role;
+
+            if (array_search($user_role, $roles) !== false) {
+                return true;
+            } 
+        } 
+        
+        return false;
     }
 }

@@ -7,6 +7,7 @@ use Doctrine\ORM\Tools\Setup;
 use Exception;
 use Framework\DI\Service;
 use Framework\Exception\BadResponseTypeException;
+use Framework\Exception\HttpForbiddenException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\InvalidTokenException;
 use Framework\Exception\NotAuthException;
@@ -75,7 +76,7 @@ class Application
             }
 
             $route = $router->parseRoute();
-            if (!empty($route)) {
+            if (!empty($route) && $security->checkRoutePermission($route)) {
                 $security->clearToken();
                 $response = $this->getResponse($route['controller'], $route['action'], isset($route['params']) ? $route['params'] : array());
             } else {
@@ -88,12 +89,16 @@ class Application
 
         } catch(HttpNotFoundException $e) {
             $response = $this->renderError($e);
+        } catch(HttpForbiddenException $e) {
+            $response = $this->renderError($e);
         } catch(BadResponseTypeException $e) {
             $response = $this->renderError($e);
         } catch(InvalidTokenException $e) {
             $response = $this->renderError($e);
         } catch(NotAuthException $e) {
-            Service::get('session')->returnUrl = $router->getCurrentRoute()['pattern'];
+            $session = Service::get('session');
+            $session->returnUrl = $router->getCurrentRoute()['pattern'];
+            $session->addFlush('info', 'You have to be logged for this operation');
             $response = new ResponseRedirect($router->generateRoute($this->config['security']['login_route']));
         } catch(Exception $e) {
             $response = $this->renderError($e);

@@ -59,16 +59,7 @@ class Router
                 $security = Service::get('security');
                 $this->current_route = $route;
                 $this->current_route['_name'] = $key;
-
-                if (isset($route['security'])) {
-                    $roles = $route['security'];
-                    $user_role = $security->isAuthenticated() ? Service::get('security')->getUser()->role : array();
-
-                    if (array_search($user_role, $roles) === false) {
-                        throw new NotAuthException();
-                    }
-                }
-
+                
                 // Get assoc array of params:
                 preg_match('~{([\w\d_]+)}~', $route['pattern'], $param_names);
                 $params = array_map('urldecode', $params);
@@ -172,9 +163,7 @@ class Router
         if (($config['mode'] == 'prod' && !file_exists($route_cache_path)) || ($config['mode'] == 'dev')) {
             $controllers = array();
             $dir_path = $config['base_path'] . 'src/';
-            $files = scandir($dir_path);
-            unset($files[0]);   //unset directory "."
-            unset($files[1]);   //unset directory ".."
+            $files = self::getDirectoryList($dir_path);
             $controller_dirs_path = array();
 
             //gets paths with "Controller" directory
@@ -187,9 +176,7 @@ class Router
 
             //gets Controller`s files paths
             foreach ($controller_dirs_path as $dir) {
-                $files = scandir($dir_path . $dir);
-                unset($files[0]);   //unset directory "."
-                unset($files[1]);   //unset directory ".."
+                $files = self::getDirectoryList($dir_path . $dir);
 
                 foreach ($files as $file) {
                     $path = $dir . '/' . $file;
@@ -240,5 +227,14 @@ class Router
         }
 
         return $routes;
+    }
+
+    protected function getDirectoryList($path)
+    {
+        $list = scandir($path);
+        unset($list[0]);   //unset directory "."
+        unset($list[1]);   //unset directory ".."
+
+        return $list;
     }
 }
