@@ -17,6 +17,7 @@ class Security
      * @var null
      */
     protected $user = null;
+    protected $token;
 
     /**
      * Security constructor.
@@ -42,13 +43,27 @@ class Security
      *
      * @return string
      */
-    public function generateToken()
+    protected function generateToken()
     {
         $token = base64_encode( openssl_random_pseudo_bytes(32));
         Service::get('session')->_csrf = $token;
         setcookie('_csrf', $token, time() + 1800); //seconds per 30 minutes
 
         return $token;
+    }
+
+    /**
+     * Returns csrf token
+     * Set new token if current is empty
+     * @return string csrf-token
+     */
+    public function getToken()
+    {
+        if (empty($this->token)) {
+            $this->token = $this->generateToken();
+        }
+        
+        return $this->token;
     }
 
     /**

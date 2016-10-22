@@ -14,8 +14,9 @@ class Renderer
     protected $title;
     protected $description;
     protected $keywords;
-    protected $params = array();
-    protected $main_layout = '';
+    protected $params = [];
+    protected $main_layout;
+    protected $route;
 
     /**
      * Renderer constructor.
@@ -24,6 +25,8 @@ class Renderer
     public function __construct($main_layout)
     {
         $this->main_layout = $main_layout;
+        //TODO Check after changing ServiceLocator
+        $this->route = Service::get('router')->getCurrentRoute();
     }
 
     /**
@@ -61,16 +64,8 @@ class Renderer
     public function render($view, $data = array(), $wrap_layout = true, $layout = false)
     {
         extract($data);
-        $router = Service::get('router');
-        $getRoute = function($route) use ($router){
-            return $router->generateRoute($route);
-        };
-        $route = $router->getCurrentRoute();
         $include = function($controller, $action, $params) {
             Service::get('app')->getResponse($controller, $action, $params)->send();
-        };
-        $generateToken = function() {
-            echo '<input type="hidden" name="_csrf" value="' .  Service::get('security')->generateToken() . '">';
         };
 
         ob_start();
@@ -86,6 +81,26 @@ class Renderer
     }
 
     /**
+     * Returns hidden input with csrf token
+     * @return string
+     */
+    protected function getTokenInput()
+    {
+        return '<input type="hidden" name="_csrf" value="' .  Service::get('security')->getToken() . '">';
+    }
+
+    /**
+     * Returns url to route
+     * 
+     * @param $route 
+     * @return string
+     */
+    protected function getRouteUrl($route)
+    {
+        return Service::get('router')->generateRoute($route);
+    }
+
+    /**
      * Returns path to view
      *
      * @param $view
@@ -98,5 +113,4 @@ class Renderer
         $controller_dir = $config['base_path'] . 'src/' . preg_replace('~Controller$~', '/', $classname);
         return str_replace(DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR, '/views/', $controller_dir) . $view . '.php';
     }
-
 }

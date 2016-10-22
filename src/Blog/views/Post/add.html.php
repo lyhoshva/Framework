@@ -110,7 +110,7 @@ $getErrorBody = function ($field) use ($errors){
                     <?php echo $getErrorBody('content')?>
                 </div>
             </div>
-            <?php $generateToken() ?>
+            <?php echo $this->getTokenInput() ?>
 
             <div class="btn-group pull-right">
                 <button type="submit" class="btn btn-success mr-5">Save</button>

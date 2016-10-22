@@ -71,13 +71,16 @@ class Application
             $request = new Request();
             $security = Service::get('security');
 
-            if ($request->isPost() && !($security->validateToken())) {
-                throw new InvalidTokenException();
+            if ($request->isPost()) {
+                if ($security->validateToken()) {
+                    $security->clearToken();
+                } else {
+                    throw new InvalidTokenException();
+                }
             }
 
             $route = $router->parseRoute();
             if (!empty($route) && $security->checkRoutePermission($route)) {
-                $security->clearToken();
                 $response = $this->getResponse($route['controller'], $route['action'], isset($route['params']) ? $route['params'] : array());
             } else {
                 throw new HttpNotFoundException('Route Not Found');
