@@ -15,19 +15,29 @@ use ReflectionMethod;
 class Cache
 {
     /**
+     * Application config
+     * @var array
+     */
+    protected $config = [];
+
+    public function __construct()
+    {
+        $this->config = Service::get('app')->config;
+    }
+
+    /**
      * Generates cache file and returns routing map
      *
      * @return array
      */
     public function getRouteMap()
     {
-        $config = Service::get('app')->config;
-        $route_cache_path = $config['base_path'] . 'app/cache/routes.php';
+        $route_cache_path = $this->config['base_path'] . 'app/cache/routes.php';
 
-        if (($config['mode'] == 'prod' && !file_exists($route_cache_path)) || ($config['mode'] == 'dev')) {
-            $routes = self::generateRouteMap();
+        if (($this->config['mode'] == 'prod' && !file_exists($route_cache_path)) || ($this->config['mode'] == 'dev')) {
+            $routes = self::generateRouteMap($route_cache_path);
         } else {
-            $routes = file_get_contents($route_cache_path);
+            $routes = unserialize(file_get_contents($route_cache_path));
         }
 
         return $routes;
@@ -38,23 +48,12 @@ class Cache
      *
      * @return array route map
      */
-    public function generateRouteMap()
+    protected function generateRouteMap($route_cache_path)
     {
-        $config = Service::get('app')->config;
-        $route_cache_path = $config['base_path'] . 'app/cache/routes.php';
         $controllers = array();
+        $dir_path = $this->config['base_path'] . 'src/';
 
-        $dir_path = $config['base_path'] . 'src/';
-        $files = self::getDirectoryList($dir_path);
-        $controller_dirs_path = array();
-
-        //gets paths with "Controller" directory
-        foreach ($files as $file) {
-            $path = $file . '/Controller';
-            if (file_exists($dir_path . $path)) {
-                $controller_dirs_path[] = $path;
-            }
-        }
+        $controller_dirs_path = self::getBundlesFolderPath('Controller', $dir_path);
 
         //gets Controller`s files paths
         foreach ($controller_dirs_path as $dir) {
@@ -102,10 +101,68 @@ class Cache
                 }
             }
         }
-        $routes = array_merge($routes, $config['routes']);
+        $routes = array_merge($routes, $this->config['routes']);
         file_put_contents($route_cache_path, serialize($routes));
 
         return $routes;
+    }
+
+    /**
+     * Returns array of paths to entities for Doctrine ORM
+     *
+     * @return array
+     */
+    public function getPathsToEntities()
+    {
+        $path_to_entities_cache = $this->config['base_path'] . 'app/cache/path_to_entities.php';
+
+        if (($this->config['mode'] == 'prod' && !file_exists($path_to_entities_cache)) || ($this->config['mode'] == 'dev')) {
+            $path_to_entities = self::generatePathToEntities($path_to_entities_cache);
+        } else {
+            $path_to_entities = unserialize(file_get_contents($path_to_entities_cache));
+        }
+
+        return $path_to_entities;
+    }
+
+    /**
+     * Generates array of paths to entities for Doctrine ORM and writes it to cache
+     *
+     * @return array route map
+     */
+    protected function generatePathToEntities($path_to_entities_cache)
+    {
+        $dir_path = $this->config['base_path'] . 'src/';
+        $path_to_entities = self::getBundlesFolderPath('Entity', $dir_path);
+
+        array_walk($path_to_entities, function(&$value) use ($dir_path){
+            $value = $dir_path . $value;
+        });
+
+        file_put_contents($path_to_entities_cache, serialize($path_to_entities));
+
+        return $path_to_entities;
+    }
+
+    /**
+     * Returns array of paths from all bundles to $directory
+     *
+     * @param $directory directory name
+     * @return array
+     */
+    protected function getBundlesFolderPath($directory, $src_path)
+    {
+        $bundle_dirs = self::getDirectoryList($src_path);
+        $folder_paths = [];
+
+        foreach ($bundle_dirs as $bundle_dir) {
+            $path = $bundle_dir . '/' . $directory;
+            if (file_exists($src_path . $path)) {
+                $folder_paths[] = $path;
+            }
+        }
+
+        return $folder_paths;
     }
 
     /**

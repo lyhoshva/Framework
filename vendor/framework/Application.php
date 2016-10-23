@@ -44,8 +44,8 @@ class Application
         Service::set('router', new Router(Service::get('cache')->getRouteMap()));
         Service::set('renderer', new Renderer($this->config['main_layout']));
         $isDevMode = ($this->config['mode'] == 'dev');
-        $paths = $this->config['paths_to_entities'];
-        $doctrineConfig = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        $paths_to_entities = Service::get('cache')->getPathsToEntities();
+        $doctrineConfig = Setup::createAnnotationMetadataConfiguration($paths_to_entities, $isDevMode);
         Service::set('doctrine', EntityManager::create($this->config['db'], $doctrineConfig));
         Service::set('db', new \PDO(
             $this->config['pdo']['dsn'],
@@ -54,8 +54,6 @@ class Application
         ));
         Service::set('session', new Session());
         Service::set('security', new Security());
-
-
     }
 
     /**
@@ -151,6 +149,6 @@ class Application
         return new Response(Service::get('renderer')->render($this->config['error_view'], [
             'code' =>  $e->getCode(),
             'message' =>  $e->getMessage(),
-        ]));
+        ], true));
     }
 }
