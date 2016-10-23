@@ -5,6 +5,7 @@ namespace Framework;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Exception;
+use Framework\Cache\Cache;
 use Framework\DI\Service;
 use Framework\Exception\BadResponseTypeException;
 use Framework\Exception\HttpForbiddenException;
@@ -39,7 +40,8 @@ class Application
         ini_set('display_errors', $this->config['mode'] == 'dev' ? '1' : '0');
 
         Service::set('app', $this);
-        Service::set('router', new Router(Router::getRouteMap()));
+        Service::set('cache', new Cache());
+        Service::set('router', new Router(Service::get('cache')->getRouteMap()));
         Service::set('renderer', new Renderer($this->config['main_layout']));
         $isDevMode = ($this->config['mode'] == 'dev');
         $paths = $this->config['paths_to_entities'];
