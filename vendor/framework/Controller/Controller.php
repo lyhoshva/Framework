@@ -14,20 +14,34 @@ use Framework\Response\ResponseRedirect;
 class Controller
 {
     /**
-     * Render view
+     * Render view with layout
      *
      * @param $view
      * @param array $data
-     * @param bool|true $wrap_layout
      * @param bool|false $layout
      * @return Response
      */
-    public function render($view, $data = array(), $wrap_layout = true, $layout = false)
+    public function render($view, $data = array(), $layout = false)
     {
         $renderer = Service::get('renderer');
         $view = $renderer->getViewPath($view, get_called_class());
 
-        return new Response($renderer->render($view, $data, $wrap_layout, $layout));
+        return new Response($renderer->render($view, $data, true, $layout));
+    }
+
+    /**
+     * Render view without layout
+     *
+     * @param $view
+     * @param array $data
+     * @return Response
+     */
+    public function renderPartial($view, $data = array())
+    {
+        $renderer = Service::get('renderer');
+        $view = $renderer->getViewPath($view, get_called_class());
+
+        return new Response($renderer->render($view, $data, false));
     }
 
     /**

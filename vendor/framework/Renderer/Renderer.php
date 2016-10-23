@@ -61,7 +61,7 @@ class Renderer
      * @param bool|false $layout
      * @return string
      */
-    public function render($view, $data = array(), $wrap_layout = true, $layout = false)
+    public function render($view, $data = array(), $wrap_layout = false, $layout = false)
     {
         extract($data);
         $include = function($controller, $action, $params) {

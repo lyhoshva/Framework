@@ -36,7 +36,7 @@ class Application
     {
         $this->config = include($config_path);
 
-        ini_set('display_errors', $this->config == 'dev' ? '1' : '0');
+        ini_set('display_errors', $this->config['mode'] == 'dev' ? '1' : '0');
 
         Service::set('app', $this);
         Service::set('router', new Router(Router::getRouteMap()));
@@ -101,7 +101,7 @@ class Application
         } catch(NotAuthException $e) {
             $session = Service::get('session');
             $session->returnUrl = $router->getCurrentRoute()['pattern'];
-            $session->addFlush('info', 'You have to be logged for this operation');
+            $session->addFlush('info', 'You have to be logged in for this operation');
             $response = new ResponseRedirect($router->generateRoute($this->config['security']['login_route']));
         } catch(Exception $e) {
             $response = $this->renderError($e);
@@ -146,7 +146,7 @@ class Application
      */
     protected function renderError($e)
     {
-        return new Response(Service::get('renderer')->render($this->config['error_500'], [
+        return new Response(Service::get('renderer')->render($this->config['error_view'], [
             'code' =>  $e->getCode(),
             'message' =>  $e->getMessage(),
         ]));
