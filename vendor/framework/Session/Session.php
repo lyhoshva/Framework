@@ -6,7 +6,7 @@ namespace Framework\Session;
  * Class Session
  * @package Framework\Session
  */
-class Session
+class Session implements SessionInterface
 {
 
     /**

@@ -11,7 +11,7 @@ use Framework\Request\Request;
  * Class Security
  * @package Framework\Security
  */
-class Security
+class Security implements SecurityInterface
 {
     /**
      * @var null
@@ -73,7 +73,7 @@ class Security
      */
     public function validateToken()
     {
-        $request = new Request();
+        $request = Service::get('request');
         $postToken = $request->post('_csrf');
         $cookieToken = $request->cookie('_csrf');
         $sessionToken = Service::get('session')->_csrf;
@@ -119,7 +119,7 @@ class Security
     /**
      * Return user
      *
-     * @return null
+     * @return object
      */
     public function getUser()
     {

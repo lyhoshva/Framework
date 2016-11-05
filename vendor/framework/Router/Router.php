@@ -13,7 +13,7 @@ use ReflectionMethod;
  * Class Router
  * @package Framework\Router
  */
-class Router
+class Router implements RouterInteface
 {
     /**
      * @var array Routes map
@@ -44,7 +44,7 @@ class Router
     public function parseRoute($url = '')
     {
         $route_found = null;
-        $request = new Request();
+        $request = Service::get('request');
         $url = empty($url) ? $request->getUri() : $url;
 
         // Don`t replace slash on route "/"

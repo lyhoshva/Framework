@@ -52,7 +52,7 @@ class Application
         $router = Service::get('router');
 
         try {
-            $request = new Request();
+            $request = Service::get('request');
             $security = Service::get('security');
 
             if ($request->isPost()) {

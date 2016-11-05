@@ -6,7 +6,7 @@ namespace Framework\Request;
  * Class Request
  * @package Framework\Request
  */
-class Request
+class Request implements RequestInteface
 {
     /**
      * Returns request method

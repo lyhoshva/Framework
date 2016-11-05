@@ -9,7 +9,7 @@ use Loader;
  * Class Renderer
  * @package Framework\Renderer
  */
-class Renderer
+class Renderer implements RendererInterface
 {
     protected $title;
     protected $description;

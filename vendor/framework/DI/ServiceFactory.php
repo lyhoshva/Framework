@@ -11,6 +11,7 @@ namespace Framework\DI;
 use Doctrine\ORM\EntityManager;
 use Framework\Cache\Cache;
 use Framework\Exception\BadServiceConfigException;
+use Framework\Exception\InvalidInterfaceException;
 use Framework\Renderer\Renderer;
 use Framework\Request\Request;
 use Framework\Router\Router;
@@ -22,6 +23,16 @@ class ServiceFactory
     const CONFIG_SERVICE_KEY = 'services';
 
     protected static $config = [];
+
+    //TODO Add doctrine interface after inplementing Doctrine wrapper
+    protected static $interfaces = [
+        'cache' => 'Framework\Cache\CacheInterface',
+        'router' => 'Framework\Router\RouterInterface',
+        'renderer' => 'Framework\Renderer\RendererInterface',
+        'session' => 'Framework\Session\SessionInteface',
+        'security' => 'Framework\Security\SecurityInterface',
+        'request' => 'Framework\Request\RequestInteface',
+    ];
 
     /**
      * Set application config
@@ -61,12 +72,15 @@ class ServiceFactory
     {
         $service_config = self::$config[self::CONFIG_SERVICE_KEY][$name];
         if (empty($service_config['class'])) {
-            throw new BadServiceConfigException("Service $name config have to contain \"class\" section with service classname");
+            throw new BadServiceConfigException("Service \"$name\" config have to contain \"class\" section with service classname");
         }
         $service_classname = $service_config['class'];
         unset($service_config['class']);
 
         $reflection_class = new \ReflectionClass($service_classname);
+        if (!empty(self::$interfaces[$name]) && !$reflection_class->implementsInterface(self::$interfaces[$name])) {
+            throw new InvalidInterfaceException('Service "' . ucfirst($name) . '" have to implements interface "' . self::$interfaces[$name] . '"');
+        }
         return $reflection_class->newInstanceArgs($service_config);
     }
 
@@ -87,7 +101,7 @@ class ServiceFactory
         throw new UnfinedServiceException("Service $name does not defined");
     }
 
-    //TODO Remove after Doctrine implementing
+    //TODO Remove after Doctrine wrapper implementing
     protected static function getDb()
     {
         return new \PDO(
@@ -113,6 +127,7 @@ class ServiceFactory
         return new Renderer(self::$config['main_layout']);
     }
 
+    //TODO Change service after inplementing Doctrine wrapper
     protected static function getDoctrine()
     {
         $isDevMode = (self::$config['mode'] == 'dev');

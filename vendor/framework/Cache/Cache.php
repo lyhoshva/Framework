@@ -12,7 +12,7 @@ use Framework\DI\Service;
 use ReflectionClass;
 use ReflectionMethod;
 
-class Cache
+class Cache implements CacheInterface
 {
     /**
      * Application config
