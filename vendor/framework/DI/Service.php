@@ -11,7 +11,7 @@ abstract class Service
     /**
      * @var array
      */
-    private static $services = array();
+    private static $services = [];
 
     /**
      * Adds service
@@ -32,6 +32,10 @@ abstract class Service
      */
     public static function get($name)
     {
-        return array_key_exists($name, self::$services) ? self::$services[$name] : null;
+        if (empty(self::$services[$name])) {
+            self::set($name, ServiceFactory::initService($name));
+        }
+
+        return self::$services[$name];
     }
 }

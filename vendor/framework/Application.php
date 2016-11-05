@@ -2,23 +2,20 @@
 
 namespace Framework;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
 use Exception;
-use Framework\Cache\Cache;
 use Framework\DI\Service;
+use Framework\DI\ServiceFactory;
 use Framework\Exception\BadResponseTypeException;
+use Framework\Exception\BadServiceConfigException;
 use Framework\Exception\HttpForbiddenException;
 use Framework\Exception\HttpNotFoundException;
+use Framework\Exception\InvalidInterfaceException;
 use Framework\Exception\InvalidTokenException;
 use Framework\Exception\NotAuthException;
-use Framework\Renderer\Renderer;
+use Framework\Exception\UndefinedServiceException;
 use Framework\Request\Request;
 use Framework\Response\Response;
 use Framework\Response\ResponseRedirect;
-use Framework\Router\Router;
-use Framework\Security\Security;
-use Framework\Session\Session;
 use ReflectionClass;
 
 /**
@@ -40,20 +37,7 @@ class Application
         ini_set('display_errors', $this->config['mode'] == 'dev' ? '1' : '0');
 
         Service::set('app', $this);
-        Service::set('cache', new Cache());
-        Service::set('router', new Router(Service::get('cache')->getRouteMap()));
-        Service::set('renderer', new Renderer($this->config['main_layout']));
-        $isDevMode = ($this->config['mode'] == 'dev');
-        $paths_to_entities = Service::get('cache')->getPathsToEntities();
-        $doctrineConfig = Setup::createAnnotationMetadataConfiguration($paths_to_entities, $isDevMode);
-        Service::set('doctrine', EntityManager::create($this->config['db'], $doctrineConfig));
-        Service::set('db', new \PDO(
-            $this->config['pdo']['dsn'],
-            $this->config['pdo']['user'],
-            $this->config['pdo']['password']
-        ));
-        Service::set('session', new Session());
-        Service::set('security', new Security());
+        ServiceFactory::setConfig($this->config);
     }
 
     /**
@@ -93,6 +77,12 @@ class Application
         } catch(HttpNotFoundException $e) {
             $response = $this->renderError($e);
         } catch(HttpForbiddenException $e) {
+            $response = $this->renderError($e);
+        } catch(InvalidInterfaceException $e) {
+            $response = $this->renderError($e);
+        } catch(UndefinedServiceException $e) {
+            $response = $this->renderError($e);
+        } catch(BadServiceConfigException $e) {
             $response = $this->renderError($e);
         } catch(BadResponseTypeException $e) {
             $response = $this->renderError($e);

@@ -17,6 +17,6 @@ class BadResponseTypeException extends Exception
     public function __construct($message = 'Bad Response Type')
     {
         $this->message = $message;
-        $this->code = 400;
+        $this->code = 500;
     }
 }

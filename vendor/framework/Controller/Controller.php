@@ -77,6 +77,6 @@ class Controller
      */
     public function getRequest()
     {
-        return new Request();
+        return Service::get('request');
     }
 }
