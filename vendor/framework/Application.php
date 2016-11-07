@@ -13,9 +13,7 @@ use Framework\Exception\InvalidInterfaceException;
 use Framework\Exception\InvalidTokenException;
 use Framework\Exception\NotAuthException;
 use Framework\Exception\UndefinedServiceException;
-use Framework\Request\Request;
 use Framework\Response\Response;
-use Framework\Response\ResponseRedirect;
 use ReflectionClass;
 
 /**
@@ -25,6 +23,7 @@ use ReflectionClass;
 class Application
 {
     public $config;
+    public $response_format = Response::FORMAT_HTML;
 
     /**
      * Application constructor.
@@ -65,7 +64,7 @@ class Application
 
             $route = $router->parseRoute();
             if (!empty($route) && $security->checkRoutePermission($route)) {
-                $response = $this->getResponse($route['controller'], $route['action'], isset($route['params']) ? $route['params'] : array());
+                $response = new Response($this->executeAction($route['controller'], $route['action'], isset($route['params']) ? $route['params'] : []));
             } else {
                 throw new HttpNotFoundException('Route Not Found');
             }
@@ -92,7 +91,8 @@ class Application
             $session = Service::get('session');
             $session->returnUrl = $router->getCurrentRoute()['pattern'];
             $session->addFlush('info', 'You have to be logged in for this operation');
-            $response = new ResponseRedirect($router->generateRoute($this->config['security']['login_route']));
+            $response = new Response();
+            $response->redirect($router->generateRoute($this->config['security']['login_route']));
         } catch(Exception $e) {
             $response = $this->renderError($e);
         }
@@ -107,7 +107,7 @@ class Application
      * @param array $params
      * @return mixed
      */
-    public function getResponse($class, $method, $params = array())
+    public function executeAction($class, $method, $params = [])
     {
         $response = null;
 
@@ -139,6 +139,6 @@ class Application
         return new Response(Service::get('renderer')->render($this->config['error_view'], [
             'code' =>  $e->getCode(),
             'message' =>  $e->getMessage(),
-        ], true));
+        ], true), $e->getCode());
     }
 }

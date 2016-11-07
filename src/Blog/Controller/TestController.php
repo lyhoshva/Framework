@@ -9,7 +9,9 @@
 namespace Blog\Controller;
 
 use Framework\Controller\Controller;
+use Framework\DI\Service;
 use Framework\Response\JsonResponse;
+use Framework\Response\Response;
 
 class TestController extends Controller
 {
@@ -20,6 +22,7 @@ class TestController extends Controller
 
     public function getJsonAction()
     {
-        return new JsonResponse(array('body' => 'Hello World'));
+        Service::get('app')->response_format = Response::FORMAT_JSON;
+        return array('body' => 'Hello World');
     }
 } 

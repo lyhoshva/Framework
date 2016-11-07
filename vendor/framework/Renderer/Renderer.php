@@ -81,6 +81,20 @@ class Renderer implements RendererInterface
     }
 
     /**
+     * Wrapper for Application::executeAction method
+     * 
+     * @param $class
+     * @param $action
+     * @param array $params
+     * @return mixed
+     */
+    protected function executeAction($class, $action, $params = [])
+    {
+        $app = Service::get('app');
+        return $app->executeAction($class, $action, $params);
+    }
+
+    /**
      * Returns hidden input with csrf token
      * @return string
      */

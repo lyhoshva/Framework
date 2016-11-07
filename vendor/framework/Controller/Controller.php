@@ -5,7 +5,6 @@ namespace Framework\Controller;
 use Framework\DI\Service;
 use Framework\Request\Request;
 use Framework\Response\Response;
-use Framework\Response\ResponseRedirect;
 
 /**
  * Class Controller
@@ -26,7 +25,7 @@ class Controller
         $renderer = Service::get('renderer');
         $view = $renderer->getViewPath($view, get_called_class());
 
-        return new Response($renderer->render($view, $data, true, $layout));
+        return $renderer->render($view, $data, true, $layout);
     }
 
     /**
@@ -41,7 +40,7 @@ class Controller
         $renderer = Service::get('renderer');
         $view = $renderer->getViewPath($view, get_called_class());
 
-        return new Response($renderer->render($view, $data, false));
+        return $renderer->render($view, $data, false);
     }
 
     /**
@@ -51,13 +50,14 @@ class Controller
      * @param string $message
      * @return ResponseRedirect
      */
-    public function redirect($redirect_to, $message = '')
+    public function redirect($redirect_to, $message = '', $code = 302)
     {
-        if ($message) {
+        if (!empty($message)) {
             Service::get('session')->addFlush('info', $message);
         }
 
-        return new ResponseRedirect($redirect_to);
+        $response = new Response();
+        $response->redirect($redirect_to, $code);
     }
 
     /**
