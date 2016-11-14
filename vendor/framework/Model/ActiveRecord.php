@@ -2,7 +2,9 @@
 
 namespace Framework\Model;
 
+use Doctrine\ORM\EntityRepository;
 use Framework\DI\Service;
+use Framework\Validation\Validator;
 
 /**
  * Class ActiveRecord
@@ -11,11 +13,11 @@ use Framework\DI\Service;
 abstract class ActiveRecord
 {
     /**
-     * Primary key
-     *
-     * @var mixed
+     * @var object EntityManager
      */
-    protected static $pk = 'id';
+    private static $em;
+
+    protected $validation_errors = [];
 
     /**
      * Returns model rules
@@ -28,119 +30,109 @@ abstract class ActiveRecord
     }
 
     /**
-     * Get names of database table fields
-     *
-     * @return array
-     */
-    public static function getFields()
-    {
-            $db = Service::get('db');
-            $sql = "SHOW FIELDS FROM " . static::getTable();
-            $result = $db->query($sql);
-            $result = $result->fetchAll();
-
-            foreach ($result as $row) {
-                $fields[] = $row['Field'];
-            }
-
-        return $fields;
-    }
-
-    /**
-     *  Returns table name
+     * Returns Entity className
      *
      * @return string
      */
-    public static function getTable()
+    public static function className()
     {
-        //empty
+        return static::class;
     }
 
     /**
-     * @param $name
-     * @param $arguments
-     * @return mixed
-     */
-    public static function __callStatic($name, $arguments)
-    {
-        if (preg_match('/^findBy([\w\d_-]+$)/', $name, $matches)) {
-            $fields = static::getFields();
-            array_walk($fields, function(&$item) {
-                $item = strtolower($item);
-            });
-            $field = strtolower($matches[1]);
-
-            if (array_search($field, $fields) !== false) {
-                $db = Service::get('db');
-                $sql = 'SELECT * FROM `' . static::getTable() . '` WHERE `'. $field . '` = :' . $field;
-                $query = $db->prepare($sql);
-                $query->bindValue(":$field", $arguments[0]);
-                $query->execute();
-                $result = $query->fetchAll(\PDO::FETCH_CLASS, get_called_class());
-
-                return  $result[0];
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns records from table
+     * Returns Entity table name
      *
-     * @param string $mode
-     * @return mixed
+     * @return string
      */
-    public static function find($mode = 'all')
+    public static function tableName()
     {
-        $db = Service::get('db');
-        $table = static::getTable();
-        $sql = "SELECT * FROM " . $table;
+        $em = self::getEntityManager();
+        return $em->getClassMetadata(static::className())->getTableName();
+    }
 
-        if ($mode !== 'all') {
-            $pk = static::$pk;
-            $sql .= " WHERE $pk = :$pk";
-            $query = $db->prepare($sql);
-            $query->bindParam(":$pk", $mode);
-            $query->execute();
-        } else {
-            $query = $db->query($sql);
+    /**
+     * @return object EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (empty(self::$em)) {
+            self::$em = Service::get('doctrine');
         }
 
-        $result = $query->fetchAll(\PDO::FETCH_CLASS, get_called_class());
+        return self::$em;
+    }
 
-        return $mode !== 'all' ? $result[0] : $result;
+    /**
+     * Returns Repository for the Entity
+     *
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return self::getEntityManager()->getRepository(static::className());
+    }
+
+    /**
+     * Returns Entity by primary key
+     *
+     * @param $id
+     * @return ActiveRecord
+     */
+    public static function findOne($id)
+    {
+        $em = self::getEntityManager();
+        return $em->find(static::className(), $id);
+    }
+
+    /**
+     * Validate object
+     *
+     * @return bool
+     */
+    public function validate()
+    {
+        $validator = new Validator($this);
+        if ($validator->isValid()) {
+            return true;
+        } else {
+            $this->validation_errors = $validator->getErrors();
+            return false;
+        }
+    }
+
+    /**
+     * Return validation errors
+     *
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->validation_errors;
     }
 
     /**
      * Saves record to table
      *
-     * @return mixed
+     * @param bool $validate
+     * @return bool
      */
-    public function save()
+    public function persist()
     {
-        $values = array();
-        $db = Service::get('db');
-        $fields = static::getFields();
-        $add_params = function($sql) use ($fields)
-        {
-            foreach ($fields as $field) {
-                $sql .= '`' . $field . '`' . ' = :' . $field . ', ';
-        }
+        $em = self::getEntityManager();
+        $em->persist($this); //TODO catch exceptions
 
-            return $sql = substr($sql, 0, -2);
-        };
-        $sql = 'INSERT INTO `' . static::getTable() . '` SET ';
-        $sql = $add_params($sql);
-        $sql .= ' ON DUPLICATE KEY UPDATE ';
-        $sql = $add_params($sql);
-
-        foreach ($fields as $field) {
-            $values[':' . $field] = isset($this->$field) ? $this->$field : null;
-        }
-
-        $result = $db->prepare($sql);
-
-        return $result->execute($values);
+        return true;
+    }
+    
+    public function flush()
+    {
+        $em = self::getEntityManager();
+        $em->flush();
+    }
+    
+    public function delete()
+    {
+        $em = self::getEntityManager();
+        $em->remove($this);
     }
 }

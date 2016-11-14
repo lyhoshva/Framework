@@ -9,6 +9,7 @@
 namespace Framework\DI;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Framework\Cache\Cache;
 use Framework\Exception\BadServiceConfigException;
 use Framework\Exception\InvalidInterfaceException;
@@ -133,7 +134,7 @@ class ServiceFactory
         $isDevMode = (self::$config['mode'] == 'dev');
         $paths_to_entities = Service::get('cache')->getPathsToEntities();
         $doctrineConfig = Setup::createAnnotationMetadataConfiguration($paths_to_entities, $isDevMode);
-        return Service::set('doctrine', EntityManager::create(self::$config['db'], $doctrineConfig));
+        return EntityManager::create(self::$config['db'], $doctrineConfig);
     }
 
     protected static function getSession()

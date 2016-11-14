@@ -1,4 +1,8 @@
-<?php if (!isset($errors)) {
+<?php
+/**
+ * @var $post \Blog\Model\Post
+ */
+if (!isset($errors)) {
     $errors = array();
 }
 
@@ -17,7 +21,7 @@ $getErrorBody = function ($field) use ($errors){
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title"><?php if (isset($post->id)) {
+        <h3 class="panel-title"><?php if (!empty($post->getId())) {
                 echo 'Edit Post';
             } else {
                 echo 'Add New Post';
@@ -38,7 +42,7 @@ $getErrorBody = function ($field) use ($errors){
                 <label class="col-sm-2 control-label">Title</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="title" placeholder="Title" value="<?php echo @$post->title ?>">
+                    <input type="text" class="form-control" name="title" placeholder="Title" value="<?php echo $post->getTitle() ?>">
                     <?php echo $getErrorBody('title')?>
                 </div>
             </div>
@@ -103,7 +107,7 @@ $getErrorBody = function ($field) use ($errors){
                     </div>
 
                     <div id="editor">
-                        <?php echo htmlspecialchars_decode(@$post->content) ?>
+                        <?php echo htmlspecialchars_decode($post->getContent()) ?>
                     </div>
 
                     <input type="hidden" name="content" id="post-content" value="">

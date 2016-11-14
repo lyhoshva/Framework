@@ -64,12 +64,7 @@ class Renderer implements RendererInterface
     public function render($view, $data = array(), $wrap_layout = false, $layout = false)
     {
         extract($data);
-        $include = function($controller, $action, $params) {
-            Service::get('app')->getResponse($controller, $action, $params)->send();
-        };
-
         ob_start();
-
         include($view);
         $content = ob_get_clean();
 

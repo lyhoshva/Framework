@@ -20,7 +20,7 @@ class SecurityController extends Controller
     public function loginAction()
     {
         if (Service::get('security')->isAuthenticated()) {
-            return new ResponseRedirect($this->generateRoute('home'));
+            $this->redirect($this->generateRoute('home'));
         }
         $errors = array();
 

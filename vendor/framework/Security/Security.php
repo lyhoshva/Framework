@@ -112,7 +112,7 @@ class Security implements SecurityInterface
         $security = Service::get('session')->security;
         if (isset($security['user']['id'])) {
             $user_class = Service::get('app')->config['security']['user_class'];
-            $this->user = $user_class::findById($security['user']['id']);
+            $this->user = $user_class::findOne($security['user']['id']);
         }
     }
 

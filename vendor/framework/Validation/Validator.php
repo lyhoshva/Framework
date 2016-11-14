@@ -39,7 +39,8 @@ class Validator
     {
         foreach ($this->obj->getRules() as $name => $rules) {
             foreach ($rules as $rule) {
-                $result = $rule->validate($this->obj->$name);
+                $setter = 'get' . ucfirst($name);
+                $result = $rule->validate($this->obj->$setter());
 
                 if ($result !== true) {
                     $this->errors[$name] = $result;
