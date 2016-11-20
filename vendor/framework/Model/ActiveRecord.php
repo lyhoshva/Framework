@@ -76,7 +76,7 @@ abstract class ActiveRecord
      * Returns Entity by primary key
      *
      * @param $id
-     * @return ActiveRecord
+     * @return static::self
      */
     public static function findOne($id)
     {
@@ -113,7 +113,6 @@ abstract class ActiveRecord
     /**
      * Saves record to table
      *
-     * @param bool $validate
      * @return bool
      */
     public function persist()

@@ -57,7 +57,7 @@ class Controller
         }
 
         $response = new Response();
-        $response->redirect($redirect_to, $code);
+        return $response->redirect($redirect_to, $code);
     }
 
     /**

@@ -10,7 +10,6 @@ namespace Blog\Controller;
 
 use Framework\Controller\Controller;
 use Framework\DI\Service;
-use Framework\Response\JsonResponse;
 use Framework\Response\Response;
 
 class TestController extends Controller

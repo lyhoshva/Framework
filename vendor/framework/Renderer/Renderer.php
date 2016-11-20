@@ -25,7 +25,6 @@ class Renderer implements RendererInterface
     public function __construct($main_layout)
     {
         $this->main_layout = $main_layout;
-        //TODO Check after changing ServiceLocator
         $this->route = Service::get('router')->getCurrentRoute();
     }
 
@@ -113,13 +112,14 @@ class Renderer implements RendererInterface
      * Returns path to view
      *
      * @param $view
-     * @param $classname
+     * @param $class_name
      * @return string
      */
-    public function getViewPath($view, $classname)
+    public function getViewPath($view, $class_name)
     {
         $config = Service::get('app')->config;
-        $controller_dir = $config['base_path'] . 'src/' . preg_replace('~Controller$~', '/', $classname);
+        $class_name = str_replace('\\', DIRECTORY_SEPARATOR, $class_name);
+        $controller_dir = $config['base_path'] . 'src/' . preg_replace('~Controller$~', '/', $class_name);
         return str_replace(DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR, '/views/', $controller_dir) . $view . '.php';
     }
 }

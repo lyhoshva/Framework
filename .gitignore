@@ -1,5 +1,5 @@
 /app/config/config.php
-/app/cache/
+/app/cache
 /composer.phar
 /.idea/
 /vendor/

@@ -48,9 +48,8 @@ class Application
      */
     public function run()
     {
-        $router = Service::get('router');
-
         try {
+            $router = Service::get('router');
             $request = Service::get('request');
             $security = Service::get('security');
 
@@ -64,7 +63,10 @@ class Application
 
             $route = $router->parseRoute();
             if (!empty($route) && $security->checkRoutePermission($route)) {
-                $response = new Response($this->executeAction($route['controller'], $route['action'], isset($route['params']) ? $route['params'] : []));
+                $response = $this->executeAction($route['controller'], $route['action'], isset($route['params']) ? $route['params'] : []);
+                if (!($response instanceof Response)) {
+                    $response = new Response($response);
+                }
             } else {
                 throw new HttpNotFoundException('Route Not Found');
             }

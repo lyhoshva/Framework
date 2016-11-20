@@ -52,7 +52,8 @@ class PostController extends Controller
                 $post->setContent(trim($this->getRequest()->post('content')));
                 $post->setDate($date);
 
-                if ($post->save()) {
+                if ($post->persist()) {
+                    $post->flush();
                     return $this->redirect($this->generateRoute('home'), 'The data has been saved successfully');
                 } else {
                     $error = $post->getErrors();

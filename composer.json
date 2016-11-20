@@ -18,5 +18,11 @@
             "Framework\\": "vendor/framework",
             "Blog\\": "src/Blog"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "mkdir -p app/cache",
+            "chmod 777 app/cache"
+        ]
     }
 }

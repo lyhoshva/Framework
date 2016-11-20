@@ -20,13 +20,13 @@ class SecurityController extends Controller
     public function loginAction()
     {
         if (Service::get('security')->isAuthenticated()) {
-            $this->redirect($this->generateRoute('home'));
+            return $this->redirect($this->generateRoute('home'));
         }
         $errors = array();
 
         if ($this->getRequest()->isPost()) {
 
-            if ($user = User::findByEmail($this->getRequest()->post('email'))) {
+            if ($user = User::getRepository()->findOneBy(['email' => $this->getRequest()->post('email')])) {
                 if ($user->password == $this->getRequest()->post('password')) {
                     Service::get('security')->setUser($user);
                     $returnUrl = Service::get('session')->returnUrl;
@@ -50,7 +50,7 @@ class SecurityController extends Controller
     public function signinAction()
     {
         if (Service::get('security')->isAuthenticated()) {
-            return new ResponseRedirect($this->generateRoute('home'));
+            return $this->redirect($this->generateRoute('home'));
         }
         $errors = array();
 
@@ -60,7 +60,8 @@ class SecurityController extends Controller
                 $user->email    = $this->getRequest()->post('email');
                 $user->password = $this->getRequest()->post('password');
                 $user->role     = 'ROLE_USER';
-                $user->save();
+                $user->persist();
+                $user->flush();
                 return $this->redirect($this->generateRoute('home'));
             } catch(DatabaseException $e){
                 $errors = array($e->getMessage());

@@ -1,6 +1,6 @@
 <?php
 
-$activeIfRoute = function ($item) {
+$activeIfRoute = function ($item) { //TODO Remove
     return $this->route['_name'] === $item ? 'class="active"' : '';
 };
 ?>

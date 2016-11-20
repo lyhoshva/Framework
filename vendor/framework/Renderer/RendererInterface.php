@@ -41,8 +41,8 @@ interface RendererInterface
      * Returns path to view
      *
      * @param $view
-     * @param $classname
+     * @param $class_name
      * @return string
      */
-    public function getViewPath($view, $classname);
+    public function getViewPath($view, $class_name);
 }

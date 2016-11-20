@@ -167,6 +167,7 @@ class Response implements ResponseInterface
      *
      * @param $uri
      * @param int $code
+     * @return $this
      * @throws BadResponseTypeException
      */
     public function redirect($uri, $code = 302)
@@ -178,6 +179,7 @@ class Response implements ResponseInterface
         $this->setHeader('Location', $uri);
         $this->body = ' ';
         $this->code = $code;
-        $this->send();
+
+        return $this;
     }
 }

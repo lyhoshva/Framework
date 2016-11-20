@@ -91,8 +91,8 @@ class Cache implements CacheInterface
                         'action' => str_replace('Action', '', $action->name)
                     ];
 
-                    $requirements = $matches[3];
-                    if (!empty($requirements)) {
+                    if (!empty($matches[3])) {
+                        $requirements = $matches[3];
                         preg_match_all('~(\w+)\s*:\s"(.+)"[\s,]*?~U', $requirements, $requirement_matches);
                         if (!empty($requirement_matches)) {
                             $routes[$matches[1]]['_requirements'] = array_combine($requirement_matches[1], $requirement_matches[2]);
