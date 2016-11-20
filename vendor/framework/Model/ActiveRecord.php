@@ -51,6 +51,29 @@ abstract class ActiveRecord
     }
 
     /**
+     * Returns Entity PrimaryKey name
+     *
+     * @return string
+     */
+    public function getPrimaryKeyField()
+    {
+        $em = self::getEntityManager();
+        return $em->getClassMetadata(static::className())->getSingleIdentifierFieldName();
+    }
+
+    /**
+     * Whether it is a new record
+     *
+     * @return bool
+     */
+    public function isNewRecord()
+    {
+        $pk_field = $this->getPrimaryKeyField();
+        $method_name = 'get' . ucfirst($pk_field);
+        return empty($this->$method_name());
+    }
+
+    /**
      * @return object EntityManager
      */
     private function getEntityManager()
@@ -103,11 +126,16 @@ abstract class ActiveRecord
     /**
      * Return validation errors
      *
+     * @param string|null $field
      * @return array
      */
-    public function getErrors()
+    public function getErrors($field = null)
     {
-        return $this->validation_errors;
+        if (is_null($field)) {
+            return $this->validation_errors;
+        } else {
+            return $this->validation_errors[$field] ?? '';
+        }
     }
 
     /**

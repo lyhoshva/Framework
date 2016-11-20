@@ -2,29 +2,16 @@
 /**
  * @var $post \Blog\Model\Post
  */
-if (!isset($errors)) {
-    $errors = array();
-}
-
-$getValidationClass = function ($field) use ($errors) {
-    return isset($errors[$field])?'has-error has-feedback':'';
-};
-
-$getErrorBody = function ($field) use ($errors){
-  if (isset($errors[$field])){
-      return '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="pull-right small form-error">'.$errors[$field].'</span>';
-  }
-    return '';
-}
+use Framework\Helper\FormHelper;
 
 ?>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title"><?php if (!empty($post->getId())) {
-                echo 'Edit Post';
-            } else {
+        <h3 class="panel-title"><?php if ($post->isNewRecord()) {
                 echo 'Add New Post';
+            } else {
+                echo 'Edit Post';
             } ?></h3>
     </div>
     <div class="panel-body">
@@ -37,16 +24,26 @@ $getErrorBody = function ($field) use ($errors){
             </div>
         <?php } ?>
 
-        <form class="form-horizontal" role="form" method="post" id="post-form" action="<?php echo $action ?>">
-            <div class="form-group <?php echo $getValidationClass('title') ?>">
+
+        <?php $form = FormHelper::begin([
+            'class' => 'form-horizontal',
+            'role' => 'form',
+            'method' => 'post',
+            'id' => 'post-form',
+            'action' => $action,
+        ]) ?>
+            <div class="form-group <?= !empty($form->getError($post, 'title')) ? 'has-error has-feedback'  : ''?>">
                 <label class="col-sm-2 control-label">Title</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="title" placeholder="Title" value="<?php echo $post->getTitle() ?>">
-                    <?php echo $getErrorBody('title')?>
+                    <?= $form->textInput($post, 'title', [
+                        'class' => 'form-control',
+                        'placeholder' => 'Title',
+                    ]) ?>
+                    <?= $form->getError($post, 'title') ?>
                 </div>
             </div>
-            <div class="form-group <?php echo $getValidationClass('content') ?>">
+            <div class="form-group <?= !empty($form->getError($post, 'content')) ? 'has-error has-feedback'  : ''?>">
                 <label class="col-sm-2 control-label">Content</label>
 
                 <div class="col-sm-10">
@@ -111,15 +108,16 @@ $getErrorBody = function ($field) use ($errors){
                     </div>
 
                     <input type="hidden" name="content" id="post-content" value="">
-                    <?php echo $getErrorBody('content')?>
+                    <?= $form->getError($post, 'content') ?>
                 </div>
             </div>
-            <?php echo $this->getTokenInput() ?>
 
             <div class="btn-group pull-right">
-                <button type="submit" class="btn btn-success mr-5">Save</button>
+                <?= $form->submitButton('Save', [
+                    'class' => 'btn btn-success mr-5',
+                ]) ?>
                 <a href="/" class="btn btn-danger">Cancel</a>
             </div>
-        </form>
+        <?php FormHelper::end() ?>
     </div>
 </div>
