@@ -40,7 +40,8 @@ use Framework\Helper\FormHelper;
                         'class' => 'form-control',
                         'placeholder' => 'Title',
                     ]) ?>
-                    <?= $form->getError($post, 'title') ?>
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <span class="pull-right small form-error"><?= $form->getError($post, 'title') ?></span>
                 </div>
             </div>
             <div class="form-group <?= !empty($form->getError($post, 'content')) ? 'has-error has-feedback'  : ''?>">
