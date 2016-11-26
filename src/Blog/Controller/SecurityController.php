@@ -8,11 +8,10 @@
 
 namespace Blog\Controller;
 
-use Blog\Model\User;
+use Shop\Model\User;
 use Framework\Controller\Controller;
 use Framework\DI\Service;
 use Framework\Exception\DatabaseException;
-use Framework\Response\ResponseRedirect;
 
 class SecurityController extends Controller
 {
@@ -27,7 +26,7 @@ class SecurityController extends Controller
         if ($this->getRequest()->isPost()) {
 
             if ($user = User::getRepository()->findOneBy(['email' => $this->getRequest()->post('email')])) {
-                if ($user->password == $this->getRequest()->post('password')) {
+                if ($user->verifyPassword($this->getRequest()->post('password'))) {
                     Service::get('security')->setUser($user);
                     $returnUrl = Service::get('session')->returnUrl;
                     unset(Service::get('session')->returnUrl);
@@ -57,9 +56,11 @@ class SecurityController extends Controller
         if ($this->getRequest()->isPost()) {
             try{
                 $user           = new User();
-                $user->email    = $this->getRequest()->post('email');
-                $user->password = $this->getRequest()->post('password');
-                $user->role     = 'ROLE_USER';
+                $user->setName('asdasdadsa');
+                $user->setPhone('7777');
+                $user->setEmail($this->getRequest()->post('email'));
+                $user->setPassword($this->getRequest()->post('password'));
+                $user->setRole('ROLE_USER');
                 $user->persist();
                 $user->flush();
                 return $this->redirect($this->generateRoute('home'));

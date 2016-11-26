@@ -46,6 +46,7 @@ class Cache implements CacheInterface
     /**
      * Generates route map from config and annotations and writes it to cache
      *
+     * @param $route_cache_path
      * @return array route map
      */
     protected function generateRouteMap($route_cache_path)
@@ -128,12 +129,13 @@ class Cache implements CacheInterface
     /**
      * Generates array of paths to entities for Doctrine ORM and writes it to cache
      *
+     * @param $path_to_entities_cache
      * @return array route map
      */
     protected function generatePathToEntities($path_to_entities_cache)
     {
         $dir_path = $this->config['base_path'] . 'src/';
-        $path_to_entities = self::getBundlesFolderPath('Entity', $dir_path);
+        $path_to_entities = self::getBundlesFolderPath('Model', $dir_path);
 
         array_walk($path_to_entities, function(&$value) use ($dir_path){
             $value = $dir_path . $value;
@@ -147,7 +149,8 @@ class Cache implements CacheInterface
     /**
      * Returns array of paths from all bundles to $directory
      *
-     * @param $directory directory name
+     * @param $directory string directory name
+     * @param $src_path
      * @return array
      */
     protected function getBundlesFolderPath($directory, $src_path)
@@ -169,7 +172,7 @@ class Cache implements CacheInterface
      * Returns a list of directory
      * Deletes current and parent directory from list
      *
-     * @param $path directory path
+     * @param $path string directory path
      * @return array
      */
     protected function getDirectoryList($path)

@@ -27,7 +27,7 @@ class PostController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('index.html', array('posts' => Post::getRepository()->findAll()));
+        return $this->render('index.html', array('posts' => []));
     }
 
     /**

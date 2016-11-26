@@ -151,7 +151,7 @@ abstract class ActiveRecord
         return true;
     }
     
-    public function flush()
+    public static function flush()
     {
         $em = self::getEntityManager();
         $em->flush();

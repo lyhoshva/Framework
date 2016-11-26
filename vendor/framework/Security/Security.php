@@ -6,6 +6,7 @@ use Framework\DI\Service;
 use Framework\Exception\HttpForbiddenException;
 use Framework\Exception\NotAuthException;
 use Framework\Request\Request;
+use Shop\Model\User;
 
 /**
  * Class Security
@@ -30,11 +31,11 @@ class Security implements SecurityInterface
     /**
      * Set user object
      *
-     * @param $user
+     * @param $user User
      */
     public function setUser($user)
     {
-        Service::get('session')->security = ['user' => ['id' => $user->id]];
+        Service::get('session')->security = ['user' => ['id' => $user->getId()]];
         $this->getUserObject();
     }
 

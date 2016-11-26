@@ -49,7 +49,7 @@ $activeIfRoute = function ($item) { //TODO Remove
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-user"></i>
-                            <?php echo 'Hello, '.$user->email ?> <span class="caret"></span>
+                            <?php echo 'Hello, '.$user->getEmail() ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li <?php echo $activeIfRoute('profile') ?>><a href="<?php echo $this->getRouteUrl('profile')?>">Profile</a></li>

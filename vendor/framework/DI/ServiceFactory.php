@@ -13,6 +13,7 @@ use Doctrine\ORM\Tools\Setup;
 use Framework\Cache\Cache;
 use Framework\Exception\BadServiceConfigException;
 use Framework\Exception\InvalidInterfaceException;
+use Framework\Exception\UndefinedServiceException;
 use Framework\Renderer\Renderer;
 use Framework\Request\Request;
 use Framework\Router\Router;
@@ -30,9 +31,9 @@ class ServiceFactory
         'cache' => 'Framework\Cache\CacheInterface',
         'router' => 'Framework\Router\RouterInterface',
         'renderer' => 'Framework\Renderer\RendererInterface',
-        'session' => 'Framework\Session\SessionInteface',
+        'session' => 'Framework\Session\SessionInterface',
         'security' => 'Framework\Security\SecurityInterface',
-        'request' => 'Framework\Request\RequestInteface',
+        'request' => 'Framework\Request\RequestInterface',
     ];
 
     /**
@@ -51,7 +52,7 @@ class ServiceFactory
      * @param $name string Service name
      * @return object Service object
      * @throws BadServiceConfigException
-     * @throws UnfinedServiceException
+     * @throws UndefinedServiceException
      */
     public static function initService($name)
     {
@@ -68,6 +69,7 @@ class ServiceFactory
      * @param $name string Service name
      * @return object Service object
      * @throws BadServiceConfigException
+     * @throws InvalidInterfaceException
      */
     protected static function initConfigService($name)
     {
@@ -90,7 +92,7 @@ class ServiceFactory
      *
      * @param $name string Service name
      * @return object Service object
-     * @throws UnfinedServiceException
+     * @throws UndefinedServiceException
      */
     protected static function initBaseService($name)
     {
@@ -99,17 +101,7 @@ class ServiceFactory
             return self::$method_name();
         }
 
-        throw new UnfinedServiceException("Service $name does not defined");
-    }
-
-    //TODO Remove after Doctrine wrapper implementing
-    protected static function getDb()
-    {
-        return new \PDO(
-            self::$config['pdo']['dsn'],
-            self::$config['pdo']['user'],
-            self::$config['pdo']['password']
-        );
+        throw new UndefinedServiceException("Service $name does not defined");
     }
 
     protected static function getCache()
@@ -128,7 +120,6 @@ class ServiceFactory
         return new Renderer(self::$config['main_layout']);
     }
 
-    //TODO Change service after inplementing Doctrine wrapper
     protected static function getDoctrine()
     {
         $isDevMode = (self::$config['mode'] == 'dev');

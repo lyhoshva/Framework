@@ -6,7 +6,7 @@ namespace Framework\Request;
  * Class Request
  * @package Framework\Request
  */
-class Request implements RequestInteface
+class Request implements RequestInterface
 {
     /**
      * Returns request method
@@ -59,10 +59,6 @@ class Request implements RequestInteface
     {
         if (isset ($_POST[$name])) {
             $var = htmlspecialchars($_POST[$name], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-
-            if ($name == 'password') {
-                $var = md5($var);
-            }
         }
 
         return isset($var) ? $var : null;
