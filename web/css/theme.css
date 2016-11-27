@@ -117,3 +117,13 @@ div[data-role="editor-toolbar"] {
 .has-error #editor{
     border-color: #a94442;
 }
+
+.product_preview__image{
+    max-height: 200px;
+    max-width: 100%;
+}
+
+.product__image{
+    max-width: 100%;
+    max-height: 100%;
+}

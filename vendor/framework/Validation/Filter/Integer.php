@@ -20,6 +20,6 @@ class Integer implements ValidatorRuleInterface
      */
     public function validate($var)
     {
-        return is_int($var) ? true : 'Not an integer';
+        return strval(intval($var)) == $var ? true : 'Not an integer';
     }
 }

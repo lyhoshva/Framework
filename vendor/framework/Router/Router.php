@@ -46,6 +46,7 @@ class Router implements RouterInteface
         $route_found = null;
         $request = Service::get('request');
         $url = empty($url) ? $request->getUri() : $url;
+        $url = preg_replace('~\?.*$~', '', $url);
 
         // Don`t replace slash on route "/"
         if ($url != '/') {
@@ -56,7 +57,6 @@ class Router implements RouterInteface
             $pattern = $this->prepare($route);
 
             if (preg_match($pattern, $url, $params)) {
-                $security = Service::get('security');
                 $this->current_route = $route;
                 $this->current_route['_name'] = $key;
                 
@@ -96,7 +96,7 @@ class Router implements RouterInteface
      * @return string
      * @throws HttpNotFoundException
      */
-    public function generateRoute($route_name, $params = array())
+    public function generateRoute($route_name, $params = [])
     {
         $route_found['pattern'] = null;
 

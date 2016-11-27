@@ -1,71 +1,79 @@
 <?php
 
-return array(
-    'home'           => array(
+return [
+    'home'           => [
         'pattern'    => '/',
-        'controller' => 'Blog\\Controller\\PostController',
-        'action'     => 'index'
-    ),
-    'testredirect'   => array(
-        'pattern'    => '/test_redirect',
-        'controller' => 'Blog\\Controller\\TestController',
-        'action'     => 'redirect',
-    ),
-    'test_json'      => array(
-        'pattern'    => '/test_json',
-        'controller' => 'Blog\\Controller\\TestController',
-        'action'     => 'getJson',
-    ),
-    'signin'         => array(
+        'controller' => 'Shop\\Controller\\ProductController',
+        'action'     => 'list',
+    ],
+    'create_product'    => [
+        'pattern'    => '/products/create',
+        'controller' => 'Shop\\Controller\\ProductController',
+        'action'     => 'create',
+    ],
+    'update_product'    => [
+        'pattern'    => '/products/update/{id}',
+        'controller' => 'Shop\\Controller\\ProductController',
+        'action'     => 'update',
+        '_requirements' => [
+            'id' => '\d+',
+        ],
+    ],
+    'delete_product'    => [
+        'pattern'    => '/products/delete/{id}',
+        'controller' => 'Shop\\Controller\\ProductController',
+        'action'     => 'delete',
+        '_requirements' => [
+            'id' => '\d+',
+        ],
+    ],
+    'product'           => [
+        'pattern'    => '/products/{id}',
+        'controller' => 'Shop\\Controller\\ProductController',
+        'action'     => 'show',
+        '_requirements' => [
+            'id' => '\d+',
+        ],
+    ],
+    'manufacturers_list'  => [
+        'pattern'    => '/manufacturers',
+        'controller' => 'Shop\\Controller\\ManufacturerController',
+        'action'     => 'list',
+    ],
+    'manufacturers_create'  => [
+        'pattern'    => '/manufacturers/create',
+        'controller' => 'Shop\\Controller\\ManufacturerController',
+        'action'     => 'create',
+    ],
+    'manufacturers_update'  => [
+        'pattern'    => '/manufacturers/update/{id}',
+        'controller' => 'Shop\\Controller\\ManufacturerController',
+        'action'     => 'update',
+        '_requirements' => [
+            'id' => '\d+',
+        ],
+    ],
+    'manufacturers_delete'  => [
+        'pattern'    => '/manufacturers/delete/{id}',
+        'controller' => 'Shop\\Controller\\ManufacturerController',
+        'action'     => 'delete',
+        '_requirements' => [
+            'id' => '\d+',
+        ],
+    ],
+    'signin'         => [
         'pattern'    => '/signin',
-        'controller' => 'Blog\\Controller\\SecurityController',
-        'action'     => 'signin'
-    ),
-    'login'          => array(
+        'controller' => 'Shop\\Controller\\SecurityController',
+        'action'     => 'signin',
+    ],
+    'login'          => [
         'pattern'    => '/login',
-        'controller' => 'Blog\\Controller\\SecurityController',
-        'action'     => 'login'
-    ),
-    'logout'         => array(
+        'controller' => 'Shop\\Controller\\SecurityController',
+        'action'     => 'login',
+    ],
+    'logout'         => [
         'pattern'    => '/logout',
-        'controller' => 'Blog\\Controller\\SecurityController',
-        'action'     => 'logout'
-    ),
-    'update_profile' => array(
-        'pattern'       => '/profile',
-        'controller'    => 'CMS\\Controller\\ProfileController',
-        'action'        => 'update',
-        '_requirements' => array(
-            '_method' => 'POST'
-        )
-    ),
-    'profile'        => array(
-        'pattern'    => '/profile',
-        'controller' => 'CMS\\Controller\\ProfileController',
-        'action'     => 'get'
-    ),
-    'add_post'       => array(
-        'pattern'    => '/posts/add',
-        'controller' => 'Blog\\Controller\\PostController',
-        'action'     => 'add',
-        'security'   => array('ROLE_USER'),
-    ),
-    'show_post'      => array(
-        'pattern'       => '/posts/{id}',
-        'controller'    => 'Blog\\Controller\\PostController',
-        'action'        => 'show',
-        '_requirements' => array(
-            'id' => '\d+'
-        )
-    ),
-    'edit_post'      => array(
-        'pattern'       => '/posts/{id}/edit',
-        'controller'    => 'CMS\\Controller\\BlogController',
-        'action'        => 'edit',
-        '_requirements' => array(
-            'id'      => '\d+',
-            '_method' => 'POST'
-        )
-
-    )
-);
+        'controller' => 'Shop\\Controller\\SecurityController',
+        'action'     => 'logout',
+    ],
+];

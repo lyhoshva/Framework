@@ -6,7 +6,7 @@
  * Time: 12:41 PM
  */
 
-namespace Blog\Controller;
+namespace Shop\Controller;
 
 use Shop\Model\User;
 use Framework\Controller\Controller;

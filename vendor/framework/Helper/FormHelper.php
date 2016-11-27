@@ -95,23 +95,25 @@ class FormHelper
     /**
      * Return dropDown input
      *
-     * @param ActiveRecord $model
-     * @param $field
-     * @param array $data
-     * @param array $options
+     * @param string $name field name
+     * @param string|array $selected options which have to be selected
+     * @param array $data data for select options
+     * @param null|string $prompt empty value name
+     * @param array $options additional html options
      * @return string
      */
-    public function dropDown(ActiveRecord $model, $field, array $data, array $options = [])
+    public function dropDown($name, $selected, array $data, $prompt = null, array $options = [])
     {
-        $tag = '<select';
+        $tag = '<select name="' . $name . '"';
         $tag = self::addOptions($tag, $options);
         $tag .= '>';
-        $method_name = 'get' . ucfirst($field);
-        $model_value = $model->$method_name();
-        if (is_array($model_value)) {
+        if (!empty($prompt)) {
+            $tag .= '<option value="">' . $prompt . '</option>';
+        }
+        if (is_array($selected)) {
             foreach ($data as $key => $value) {
                 $tag .= '<option value="' . $key . '"';
-                if (in_array($key, $model_value)) {
+                if (in_array($key, $selected)) {
                     $tag .= ' selected="selected"';
                 }
                 $tag .= '>' . $value . '</option>';
@@ -119,7 +121,7 @@ class FormHelper
         } else {
             foreach ($data as $key => $value) {
                 $tag .= '<option value="' . $key . '"';
-                if ($model_value == $key) {
+                if ($selected == $key) {
                     $tag .= ' selected="selected"';
                 }
                 $tag .= '>' . $value . '</option>';

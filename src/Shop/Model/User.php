@@ -8,7 +8,6 @@
 
 namespace Shop\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Framework\Model\ActiveRecord;
 use Framework\Security\Model\UserInterface;
 use Framework\Validation\Filter\Length;
@@ -33,7 +32,7 @@ class User extends ActiveRecord implements UserInterface
     /** @Column(type="string") **/
     private $role;
     /**
-     * @OneToMany(targetEntity="\Shop\Model\Order". inversedBy="client")
+     * @OneToMany(targetEntity="\Shop\Model\Order", mappedBy="client")
      * @JoinColumn(name="client_id", referencedColumnName="id")
      */
     private $orders;

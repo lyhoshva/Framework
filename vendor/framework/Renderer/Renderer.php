@@ -99,13 +99,14 @@ class Renderer implements RendererInterface
 
     /**
      * Returns url to route
-     * 
-     * @param $route 
+     *
+     * @param $route
+     * @param array $params
      * @return string
      */
-    protected function getRouteUrl($route)
+    protected function generateRoute($route, $params = [])
     {
-        return Service::get('router')->generateRoute($route);
+        return Service::get('router')->generateRoute($route, $params);
     }
 
     /**

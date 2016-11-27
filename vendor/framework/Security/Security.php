@@ -5,7 +5,6 @@ namespace Framework\Security;
 use Framework\DI\Service;
 use Framework\Exception\HttpForbiddenException;
 use Framework\Exception\NotAuthException;
-use Framework\Request\Request;
 use Shop\Model\User;
 
 /**
@@ -169,7 +168,7 @@ class Security implements SecurityInterface
     public function checkPermission(array $roles)
     {
         if ($this->isAuthenticated()) {
-            $user_role = $this->getUser()->role;
+            $user_role = $this->getUser()->getRole();
 
             if (array_search($user_role, $roles) !== false) {
                 return true;

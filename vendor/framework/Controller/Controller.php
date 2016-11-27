@@ -48,7 +48,8 @@ class Controller
      *
      * @param string $redirect_to
      * @param string $message
-     * @return ResponseRedirect
+     * @param int $code
+     * @return Response
      */
     public function redirect($redirect_to, $message = '', $code = 302)
     {
@@ -64,12 +65,13 @@ class Controller
      * Generate path to route
      *
      * @param $route
+     * @param array $params
      * @return mixed
      */
-    public function generateRoute($route)
+    public function generateRoute($route, array $params = [])
     {
         $router = Service::get('router');
-        return $router->generateRoute($route);
+        return $router->generateRoute($route, $params);
     }
 
     /**
