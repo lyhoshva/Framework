@@ -61,12 +61,13 @@ class Router implements RouterInteface
                 $this->current_route['_name'] = $key;
                 
                 // Get assoc array of params:
-                preg_match('~{([\w\d_]+)}~', $route['pattern'], $param_names);
+                preg_match_all('~{([\w\d_]+)}~', $route['pattern'], $param_names);
+                $param_names = $param_names[1];
                 $params = array_map('urldecode', $params);
+                array_shift($params); // Get rid of 0 element
 
                 if (!empty($param_names)) {
                     $params = array_combine($param_names, $params);
-                    array_shift($params); // Get rid of 0 element
                     $this->current_route['params'] = $params;
                 }
 

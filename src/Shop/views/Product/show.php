@@ -16,7 +16,7 @@ use Framework\Security\Roles;
     <?php if (Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) : ?>
     <a href="<?= $this->generateRoute('update_product', ['id' => $product->getId()]) ?>" class="btn btn-primary">Update</a>
     <a href="<?= $this->generateRoute('delete_product', ['id' => $product->getId()]) ?>" class="btn btn-danger"
-       onclick="return confirm('Are you sure want to delete this item?')">Delete</a>
+       data-confirm="Are you sure want to delete the item?">Delete</a>
     <?php endif; ?>
 </div>
 <div class="col-md-5">
@@ -61,4 +61,5 @@ use Framework\Security\Roles;
         </tr>
         </tbody>
     </table>
+    <a href="<?= $this->generateRoute('add_to_cart', ['id' => $product->getId()]) ?>" class="btn btn-success pull-right">Add to cart</a>
 </div>

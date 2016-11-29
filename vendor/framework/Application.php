@@ -114,7 +114,7 @@ class Application
         $response = null;
 
         if (!is_array($params)) {
-            $params = array();
+            $params = [];
         }
 
         $reflectionController = new ReflectionClass($class);

@@ -24,7 +24,7 @@ return [
         'controller' => 'Shop\\Controller\\ProductController',
         'action'     => 'delete',
         '_requirements' => [
-            'id' => '\d+',
+            'id' => '\d+', //TODO Add Method POST
         ],
     ],
     'product'           => [
@@ -58,8 +58,43 @@ return [
         'controller' => 'Shop\\Controller\\ManufacturerController',
         'action'     => 'delete',
         '_requirements' => [
-            'id' => '\d+',
+            'id' => '\d+', //TODO Add Method POST
         ],
+    ],
+    'add_to_cart' => [
+        'pattern'    => '/cart/add/{id}',
+        'controller' => 'Shop\\Controller\\CartController',
+        'action'     => 'add',
+        '_requirements' => [
+            'id' => '\d+', //TODO Add Method POST
+        ],
+    ],
+    'clear_cart' => [
+        'pattern'    => '/cart/clear',
+        'controller' => 'Shop\\Controller\\CartController',
+        'action'     => 'clear',
+    ],
+    'cart_delete' => [
+        'pattern'    => '/cart/delete/{id}',
+        'controller' => 'Shop\\Controller\\CartController',
+        'action'     => 'delete',
+        '_requirements' => [
+            'id' => '\d+', //TODO Add Method POST
+        ],
+    ],
+    'cart_set_count' => [
+        'pattern'    => '/cart/set/{id}/{count}',
+        'controller' => 'Shop\\Controller\\CartController',
+        'action'     => 'setProductCount',
+        '_requirements' => [
+            'id' => '\d+', //TODO Add Method POST
+            'count' => '\d+', //TODO Add Method POST
+        ],
+    ],
+    'cart_list' => [
+        'pattern'    => '/cart',
+        'controller' => 'Shop\\Controller\\CartController',
+        'action'     => 'list',
     ],
     'signin'         => [
         'pattern'    => '/signin',
@@ -69,11 +104,11 @@ return [
     'login'          => [
         'pattern'    => '/login',
         'controller' => 'Shop\\Controller\\SecurityController',
-        'action'     => 'login',
+        'action'     => 'login', //TODO Add Method POST
     ],
     'logout'         => [
         'pattern'    => '/logout',
         'controller' => 'Shop\\Controller\\SecurityController',
-        'action'     => 'logout',
+        'action'     => 'logout', //TODO Add Method POST
     ],
 ];

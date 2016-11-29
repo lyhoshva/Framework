@@ -57,6 +57,7 @@ use Framework\Security\Roles;
                 <?php endif; ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <?= $this->executeAction('\Shop\Controller\CartController', 'preview') ?>
                 <?php if (is_null($user)) : ?>
                     <li><a href="<?php echo $this->generateRoute('signin')?>">Sign in</a></li>
                     <li><a href="<?php echo $this->generateRoute('login')?>">Login</a></li>
@@ -97,14 +98,7 @@ use Framework\Security\Roles;
 <script type="application/javascript" src="/js/bootstrap.min.js"></script>
 <script type="application/javascript" src="/js/jquery.hotkeys.js"></script>
 <script type="application/javascript" src="/js/bootstrap-wysiwyg.js"></script>
-<script type="application/javascript">
-    $(document).ready(function () {
-        $('#editor').wysiwyg();
-        $('#post-form').submit(function (e) {
-            $('#post-content').val($('#editor').html());
-        })
-    });
-</script>
+<script type="application/javascript" src="/js/script.js"></script>
 
 </body>
 </html>

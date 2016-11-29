@@ -23,7 +23,7 @@
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
                 <a href="<?= $this->generateRoute('manufacturers_delete', ['id' => $manufacturer->getId()]) ?>"
-                onclick="return confirm('Are you sure want to delete this item?')">
+                   data-confirm="Are you sure want to delete this item?">
                     <span class="glyphicon glyphicon-trash"></span>
                 </a>
             </td>
