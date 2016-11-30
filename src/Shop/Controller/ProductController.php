@@ -39,10 +39,6 @@ class ProductController extends Controller
 
     public function createAction()
     {
-        if (!Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) {
-            throw new HttpForbiddenException();
-        }
-
         $product = new Product();
         $request = Service::get('request');
 
@@ -73,10 +69,6 @@ class ProductController extends Controller
 
     public function updateAction($id)
     {
-        if (!Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) {
-            throw new HttpForbiddenException();
-        }
-
         $product = $this->findOne($id);
         $request = Service::get('request');
 
@@ -107,10 +99,6 @@ class ProductController extends Controller
 
     public function deleteAction($id)
     {
-        if (!Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) {
-            throw new HttpForbiddenException();
-        }
-
         $product = $this->findOne($id);
 
         $product->delete();

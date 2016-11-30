@@ -20,10 +20,6 @@ class ManufacturerController extends Controller
 {
     public function listAction()
     {
-        if (!Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) {
-            throw new HttpForbiddenException();
-        }
-
         $manufacturers = Manufacturer::getRepository()->findAll();
         return $this->render('list', [
             'manufacturers' => $manufacturers,
@@ -32,10 +28,6 @@ class ManufacturerController extends Controller
 
     public function createAction()
     {
-        if (!Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) {
-            throw new HttpForbiddenException();
-        }
-
         $manufacturer = new Manufacturer();
         $request = Service::get('request');
 
@@ -56,10 +48,6 @@ class ManufacturerController extends Controller
 
     public function updateAction($id)
     {
-        if (!Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) {
-            throw new HttpForbiddenException();
-        }
-
         $manufacturer = $this->findOne($id);
         $request = Service::get('request');
 
@@ -79,10 +67,6 @@ class ManufacturerController extends Controller
 
     public function deleteAction($id)
     {
-        if (!Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) {
-            throw new HttpForbiddenException();
-        }
-
         $manufacturer = $this->findOne($id);
         $manufacturer->delete();
         ActiveRecord::flush();

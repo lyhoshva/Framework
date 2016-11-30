@@ -39,12 +39,12 @@ class Product extends ActiveRecord
     private $processor;
     /** @Column(type="integer") **/
     private $sim_count;
-    /** @OneToMany(targetEntity="\Shop\Model\OrderedProducts", mappedBy="product", cascade={"persist"}) */
-    private $orderedProduct;
+    /** @OneToMany(targetEntity="\Shop\Model\OrderedProducts", mappedBy="product", cascade={"persist"}, fetch="EAGER") */
+    private $orderedProducts;
 
     public function __construct()
     {
-        $this->orderedProduct = new ArrayCollection();
+        $this->orderedProducts = new ArrayCollection();
     }
 
     /**
@@ -226,8 +226,8 @@ class Product extends ActiveRecord
     /**
      * @return mixed
      */
-    public function getOrderedProduct()
+    public function getOrderedProducts()
     {
-        return $this->orderedProduct;
+        return $this->orderedProducts;
     }
 }

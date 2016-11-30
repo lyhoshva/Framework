@@ -32,6 +32,12 @@ $(document).ready(function () {
             .done(function (data) {
                 $item.find('[data-cart="product-price"]').html(data.product_price);
                 $('[data-cart="total-price"]').html(data.total_price)
+            })
+            .fail(function () {
+                $('[data-role="container"]').prepend('<div class="alert alert-danger alert-dismissible" role="alert"> ' +
+                    '<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span>' +
+                    '<span class="sr-only">Close</span></button>' +
+                    'We have some problems =(. Please, try again later.</div>');
             });
     }
 });

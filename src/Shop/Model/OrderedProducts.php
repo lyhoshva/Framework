@@ -15,9 +15,9 @@ class OrderedProducts extends ActiveRecord
 {
     /** @Id @Column(type="integer") @GeneratedValue **/
     private $id;
-    /** @ManyToOne(targetEntity="\Shop\Model\Order", inversedBy="orderedProduct") */
+    /** @ManyToOne(targetEntity="\Shop\Model\Order", inversedBy="orderedProducts") */
     private $order;
-    /** @ManyToOne(targetEntity="\Shop\Model\Product", inversedBy="orderedProduct") */
+    /** @ManyToOne(targetEntity="\Shop\Model\Product", inversedBy="orderedProducts") */
     private $product;
     /** @Column(type="integer") **/
     private $count;

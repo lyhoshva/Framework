@@ -8,6 +8,7 @@ $cart_array = $cart->getCartArray();
 ?>
 <h1>Cart list</h1>
 <a href="<?= $this->generateRoute('clear_cart') ?>" class="btn btn-primary">Clear cart</a>
+<a href="<?= $this->generateRoute('order_create') ?>" class="btn btn-success">Make order</a>
 <table class="table table-hover">
     <tbody>
     <?php foreach ($products as $product) : ?>

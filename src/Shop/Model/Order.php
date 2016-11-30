@@ -11,6 +11,7 @@ namespace Shop\Model;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Framework\Model\ActiveRecord;
+use Framework\Validation\Filter\Integer;
 use Framework\Validation\Filter\Length;
 use Framework\Validation\Filter\NotBlank;
 
@@ -18,38 +19,35 @@ use Framework\Validation\Filter\NotBlank;
 class Order extends ActiveRecord
 {
     /** @Id @Column(type="integer") @GeneratedValue **/
-    private $id;
+    protected $id;
     /**
      * @ManyToOne(targetEntity="\Shop\Model\User")
      * @JoinColumn(name="client_id", referencedColumnName="id")
      */
-    private $client;
+    protected $client;
     /**
      * @ManyToOne(targetEntity="\Shop\Model\DeliveryType")
      * @JoinColumn(name="delivery_type_id", referencedColumnName="id")
      */
-    private $delivery_type;
+    protected $delivery_type;
     /**
      * @ManyToOne(targetEntity="\Shop\Model\PaymentType")
      * @JoinColumn(name="payment_type_id", referencedColumnName="id")
      */
-    private $payment_type;
-    /**
-     * @ManyToOne(targetEntity="\Shop\Model\PaymentStatus")
-     * @JoinColumn(name="payment_status_id", referencedColumnName="id")
-     */
-    private $payment_status;
+    protected $payment_type;
     /**
      * @ManyToOne(targetEntity="\Shop\Model\OrderStatus")
      * @JoinColumn(name="order_status_id", referencedColumnName="id")
      */
-    private $order_status;
+    protected $order_status;
     /** @Column(type="string") */
-    private $address;
+    protected $address;
+    /** @Column(type="integer", name="total_price") */
+    protected $totalPrice;
     /** @Column(type="datetime") */
-    private $date;
+    protected $date;
     /** @OneToMany(targetEntity="\Shop\Model\OrderedProducts", mappedBy="order", cascade={"persist"}) */
-    private $orderedProducts;
+    protected $orderedProducts;
 
     public function __construct()
     {
@@ -78,11 +76,9 @@ class Order extends ActiveRecord
             'paymentType' => [
                 new NotBlank(),
             ],
-            'paymentStatus' => [
+            'totalPrice' => [
                 new NotBlank(),
-            ],
-            'orderStatus' => [
-                new NotBlank(),
+                new Integer(),
             ],
         );
     }
@@ -144,22 +140,6 @@ class Order extends ActiveRecord
     }
 
     /**
-     * @return PaymentStatus
-     */
-    public function getPaymentStatus()
-    {
-        return $this->payment_status;
-    }
-
-    /**
-     * @param PaymentStatus $payment_status
-     */
-    public function setPaymentStatus(PaymentStatus $payment_status)
-    {
-        $this->payment_status = $payment_status;
-    }
-
-    /**
      * @return OrderStatus
      */
     public function getOrderStatus()
@@ -210,7 +190,23 @@ class Order extends ActiveRecord
     /**
      * @return mixed
      */
-    public function getOrderedProduct()
+    public function getTotalPrice()
+    {
+        return $this->totalPrice;
+    }
+
+    /**
+     * @param mixed $totalPrice
+     */
+    public function setTotalPrice($totalPrice)
+    {
+        $this->totalPrice = $totalPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderedProducts()
     {
         return $this->orderedProducts;
     }

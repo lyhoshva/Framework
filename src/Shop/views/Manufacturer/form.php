@@ -9,9 +9,7 @@ use Framework\Helper\FormHelper;
 <h1><?= $manufacturer->isNewRecord() ? 'Creating manufacturer' : 'Updating manufacturer: ' . $manufacturer->getName() ?></h1>
 <ol class="breadcrumb">
     <li><a href="<?= $this->generateRoute('home') ?>">Home</a></li>
-    <?php if (!$manufacturer->isNewRecord()) : ?>
-        <li><a href="<?= $this->generateRoute('product', ['id' => $manufacturer->getId()]) ?>"><?= $manufacturer->getName() ?></a></li>
-    <?php endif; ?>
+    <li><a href="<?= $this->generateRoute('manufacturers_list') ?>">Manufacturers list</a></li>
     <li class="active"><?= $manufacturer->isNewRecord() ? 'Creating manufacturer' : 'Updating manufacturer' ?></li>
 </ol>
 <div class="panel panel-default">

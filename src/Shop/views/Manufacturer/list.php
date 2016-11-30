@@ -4,6 +4,11 @@
  * @var \Shop\Model\Manufacturer[] $manufacturers
  */
 ?>
+<h1>Manufacturers list</h1>
+<ol class="breadcrumb">
+    <li><a href="<?= $this->generateRoute('home') ?>">Home</a></li>
+    <li class="active">Manufacturers list</li>
+</ol>
 <a href="<?= $this->generateRoute('manufacturers_create') ?>" class="btn btn-primary">Create Manufacturer</a>
 <table class="table table-hover">
     <thead>

@@ -46,14 +46,8 @@ use Framework\Security\Roles;
                 <li><a href="<?php echo $this->generateRoute('home')?>">Home</a></li>
                 <?php if (Service::get('security')->checkPermission([Roles::ROLE_ADMIN])) : ?>
                     <li><a href="<?php echo $this->generateRoute('create_product')?>">Add Product</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Additional
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="<?php echo $this->generateRoute('manufacturers_list')?>">Manufacturers</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="<?php echo $this->generateRoute('order_list')?>">Orders</a></li>
+                    <li><a href="<?php echo $this->generateRoute('manufacturers_list')?>">Manufacturers</a></li>
                 <?php endif; ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -79,7 +73,7 @@ use Framework\Security\Roles;
 </div>
 
 <div class="container theme-showcase" role="main">
-    <div class="row">
+    <div class="row" data-role="container">
         <?php foreach($flush as $type => $msgs) :
             foreach($msgs as $msg) : ?>
                 <div class="alert alert-<?= $type ?> alert-dismissible" role="alert">
