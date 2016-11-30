@@ -16,7 +16,6 @@
     "autoload":{
         "psr-4": {
             "Framework\\": "vendor/framework",
-            "Blog\\": "src/Blog",
             "Shop\\": "src/Shop"
         }
     },
