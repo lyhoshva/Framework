@@ -66,11 +66,30 @@ class FormHelper
     {
         $method_name = 'get' . ucfirst($field);
 
-        $input_tag = '<input type="text" name="' . $field . '" value="' . $model->$method_name() . '"';
-        $input_tag = self::addOptions($input_tag, $options);
-        $input_tag .= '>';
+        $tag = '<input type="text" name="' . $field . '" value="' . $model->$method_name() . '"';
+        $tag = self::addOptions($tag, $options);
+        $tag .= '>';
 
-        return $input_tag;
+        return $tag;
+    }
+
+    /**
+     * Return text input
+     *
+     * @param ActiveRecord $model
+     * @param $field
+     * @param array $options
+     * @return string
+     */
+    public function passwordInput(ActiveRecord $model, $field, array $options = [])
+    {
+        $method_name = 'get' . ucfirst($field);
+
+        $tag = '<input type="password" name="' . $field . '" value="' . $model->$method_name() . '"';
+        $tag = self::addOptions($tag, $options);
+        $tag .= '>';
+
+        return $tag;
     }
 
     /**
@@ -85,11 +104,11 @@ class FormHelper
     {
         $method_name = 'get' . ucfirst($field);
 
-        $input_tag = '<input type="hidden" name="' . $field . '" value="' . $model->$method_name() . '"';
-        $input_tag = self::addOptions($input_tag, $options);
-        $input_tag .= '>';
+        $tag = '<input type="hidden" name="' . $field . '" value="' . $model->$method_name() . '"';
+        $tag = self::addOptions($tag, $options);
+        $tag .= '>';
 
-        return $input_tag;
+        return $tag;
     }
 
     /**

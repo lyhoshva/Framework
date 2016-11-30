@@ -8,10 +8,10 @@
 
 namespace Shop\Controller;
 
-use Shop\Model\User;
 use Framework\Controller\Controller;
 use Framework\DI\Service;
-use Framework\Exception\DatabaseException;
+use Framework\Security\Roles;
+use Shop\Model\User;
 
 class SecurityController extends Controller
 {
@@ -51,24 +51,24 @@ class SecurityController extends Controller
         if (Service::get('security')->isAuthenticated()) {
             return $this->redirect($this->generateRoute('home'));
         }
-        $errors = array();
 
+        $user = new User();
         if ($this->getRequest()->isPost()) {
-            try{
-                $user           = new User();
-                $user->setName('asdasdadsa');
-                $user->setPhone('7777');
-                $user->setEmail($this->getRequest()->post('email'));
-                $user->setPassword($this->getRequest()->post('password'));
-                $user->setRole('ROLE_USER');
+            $user->setName($this->getRequest()->post('name'));
+            $user->setPhone($this->getRequest()->post('phone'));
+            $user->setEmail($this->getRequest()->post('email'));
+            $user->setPassword($this->getRequest()->post('password'));
+            $user->setRole(Roles::ROLE_USER);
+            if ($user->validate()) {
                 $user->persist();
                 $user->flush();
+                Service::get('security')->setUser($user);
                 return $this->redirect($this->generateRoute('home'));
-            } catch(DatabaseException $e){
-                $errors = array($e->getMessage());
             }
         }
 
-        return $this->render('signin.html', array('errors' => $errors));
+        return $this->render('signin.html', [
+            'user' => $user,
+        ]);
     }
 }
