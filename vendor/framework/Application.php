@@ -91,7 +91,8 @@ class Application
             $response = $this->renderError($e);
         } catch(NotAuthException $e) {
             $session = Service::get('session');
-            $session->returnUrl = $router->getCurrentRoute()['pattern'];
+            $current_route = $router->getCurrentRoute();
+            $session->returnUrl = $router->generateRoute($current_route['_name'], $current_route['params']);
             $session->addFlush('info', 'You have to be logged in for this operation');
             $response = new Response();
             $response->redirect($router->generateRoute($this->config['security']['login_route']));
