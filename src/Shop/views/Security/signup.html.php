@@ -8,11 +8,11 @@ use Framework\Helper\FormHelper;
 ?>
 <div class="container">
     <?php $form = FormHelper::begin([
-        'class' => 'form-signin',
+        'class' => 'form-signup',
         'method' => 'post',
-        'action' => $this->generateRoute('signin'),
+        'action' => $this->generateRoute('signup'),
     ]) ?>
-    <h2 class="form-signin-heading">Please sign in</h2>
+    <h2 class="form-signup-heading">Please sign up</h2>
     <div class="form-group <?= !empty($form->getError($user, 'name')) ? 'has-error has-feedback'  : ''?>">
         <label class="control-label">Name</label>
         <?= $form->textInput($user, 'name', [
@@ -62,6 +62,18 @@ use Framework\Helper\FormHelper;
         <?php endif; ?>
     </div>
 
-    <?= $form->submitButton('Sign in', ['class' => 'btn btn-lg btn-primary btn-block']) ?>
+    <div class="form-group <?= !empty($form->getError($user, 'rePassword')) ? 'has-error has-feedback'  : ''?>">
+        <label class="control-label">Password confirm</label>
+        <?= $form->passwordInput($user, 'rePassword', [
+            'class' => 'form-control',
+            'placeholder' => 'Password confirm',
+        ]) ?>
+        <?php if (!empty($form->getError($user, 'rePassword'))) : ?>
+            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span class="pull-right small form-error"><?= $form->getError($user, 'rePassword') ?></span>
+        <?php endif; ?>
+    </div>
+
+    <?= $form->submitButton('Sign up', ['class' => 'btn btn-lg btn-primary btn-block']) ?>
     <?php FormHelper::end(); ?>
 </div>

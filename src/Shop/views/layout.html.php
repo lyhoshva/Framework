@@ -53,7 +53,7 @@ use Framework\Security\Roles;
             <ul class="nav navbar-nav navbar-right">
                 <?= $this->executeAction('\Shop\Controller\CartController', 'preview') ?>
                 <?php if (is_null($user)) : ?>
-                    <li><a href="<?php echo $this->generateRoute('signin')?>">Sign in</a></li>
+                    <li><a href="<?php echo $this->generateRoute('signup')?>">Sign up</a></li>
                     <li><a href="<?php echo $this->generateRoute('login')?>">Login</a></li>
                 <?php else : ?>
                     <li class="dropdown">

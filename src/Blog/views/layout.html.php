@@ -43,7 +43,7 @@ $activeIfRoute = function ($item) { //TODO Remove
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php if (is_null($user)) { ?>
-                    <li <?php echo $activeIfRoute('signin') ?>><a href="<?php echo $this->getRouteUrl('signin')?>">Sign in</a></li>
+                    <li <?php echo $activeIfRoute('signup') ?>><a href="<?php echo $this->getRouteUrl('signup')?>">Sign in</a></li>
                     <li <?php echo $activeIfRoute('login') ?>><a href="<?php echo $this->getRouteUrl('login')?>">Login</a></li>
                 <?php } else { ?>
                     <li class="dropdown">

@@ -136,10 +136,10 @@ return [
             'id' => '\d+', //TODO Add Method POST
         ],
     ],
-    'signin'         => [
-        'pattern'    => '/signin',
+    'signup'         => [
+        'pattern'    => '/signup',
         'controller' => 'Shop\\Controller\\SecurityController',
-        'action'     => 'signin',
+        'action'     => 'signup',
     ],
     'login'          => [
         'pattern'    => '/login',

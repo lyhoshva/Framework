@@ -46,7 +46,7 @@ class SecurityController extends Controller
         return $this->redirect($this->generateRoute('home'));
     }
 
-    public function signinAction()
+    public function signupAction()
     {
         if (Service::get('security')->isAuthenticated()) {
             return $this->redirect($this->generateRoute('home'));
@@ -58,6 +58,7 @@ class SecurityController extends Controller
             $user->setPhone($this->getRequest()->post('phone'));
             $user->setEmail($this->getRequest()->post('email'));
             $user->setPassword($this->getRequest()->post('password'));
+            $user->setRePassword($this->getRequest()->post('rePassword'));
             $user->setRole(Roles::ROLE_USER);
             if ($user->validate()) {
                 $user->persist();
@@ -67,7 +68,7 @@ class SecurityController extends Controller
             }
         }
 
-        return $this->render('signin.html', [
+        return $this->render('signup.html', [
             'user' => $user,
         ]);
     }
