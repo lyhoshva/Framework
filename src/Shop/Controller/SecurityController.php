@@ -10,7 +10,7 @@ namespace Shop\Controller;
 
 use Framework\Controller\Controller;
 use Framework\DI\Service;
-use Framework\Security\Roles;
+use Shop\Model\Roles;
 use Shop\Model\User;
 
 class SecurityController extends Controller

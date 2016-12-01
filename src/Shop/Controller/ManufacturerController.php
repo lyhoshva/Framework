@@ -10,10 +10,8 @@ namespace Shop\Controller;
 
 use Framework\Controller\Controller;
 use Framework\DI\Service;
-use Framework\Exception\HttpForbiddenException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Model\ActiveRecord;
-use Framework\Security\Roles;
 use Shop\Model\Manufacturer;
 
 class ManufacturerController extends Controller

@@ -5,7 +5,7 @@
  * @var string $content
  */
 use Framework\DI\Service;
-use Framework\Security\Roles;
+use Shop\Model\Roles;
 
 ?>
 

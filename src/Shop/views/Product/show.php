@@ -4,7 +4,7 @@
  * @var \Framework\Renderer\Renderer $this
  */
 use Framework\DI\Service;
-use Framework\Security\Roles;
+use Shop\Model\Roles;
 
 ?>
 <div class="col-md-12">

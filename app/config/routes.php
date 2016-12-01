@@ -1,5 +1,7 @@
 <?php
 
+use Shop\Model\Roles;
+
 return [
     'home'           => [
         'pattern'    => '/',
@@ -10,13 +12,13 @@ return [
         'pattern'    => '/products/create',
         'controller' => 'Shop\\Controller\\ProductController',
         'action'     => 'create',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
     ],
     'update_product'    => [
         'pattern'    => '/products/update/{id}',
         'controller' => 'Shop\\Controller\\ProductController',
         'action'     => 'update',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
             'id' => '\d+',
         ],
@@ -25,7 +27,7 @@ return [
         'pattern'    => '/products/delete/{id}',
         'controller' => 'Shop\\Controller\\ProductController',
         'action'     => 'delete',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
             'id' => '\d+', //TODO Add Method POST
         ],
@@ -42,19 +44,19 @@ return [
         'pattern'    => '/manufacturers',
         'controller' => 'Shop\\Controller\\ManufacturerController',
         'action'     => 'list',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
     ],
     'manufacturers_create'  => [
         'pattern'    => '/manufacturers/create',
         'controller' => 'Shop\\Controller\\ManufacturerController',
         'action'     => 'create',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
     ],
     'manufacturers_update'  => [
         'pattern'    => '/manufacturers/update/{id}',
         'controller' => 'Shop\\Controller\\ManufacturerController',
         'action'     => 'update',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
             'id' => '\d+',
         ],
@@ -63,7 +65,7 @@ return [
         'pattern'    => '/manufacturers/delete/{id}',
         'controller' => 'Shop\\Controller\\ManufacturerController',
         'action'     => 'delete',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
             'id' => '\d+', //TODO Add Method POST
         ],
@@ -107,13 +109,13 @@ return [
         'pattern'    => '/order/create',
         'controller' => 'Shop\\Controller\\OrderController',
         'action'     => 'create',
-        'security'   => ['ROLE_USER', 'ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_USER, Roles::ROLE_ADMIN],
     ],
     'order_update' => [
         'pattern'    => '/order/update/{id}',
         'controller' => 'Shop\\Controller\\OrderController',
         'action'     => 'update',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
             'id' => '\d+', //TODO Add Method POST
         ],
@@ -122,7 +124,7 @@ return [
         'pattern'    => '/order/list',
         'controller' => 'Shop\\Controller\\OrderController',
         'action'     => 'list',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
             'id' => '\d+', //TODO Add Method POST
         ],
@@ -131,7 +133,7 @@ return [
         'pattern'    => '/order/{id}',
         'controller' => 'Shop\\Controller\\OrderController',
         'action'     => 'show',
-        'security'   => ['ROLE_ADMIN'],
+        'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
             'id' => '\d+', //TODO Add Method POST
         ],
