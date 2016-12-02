@@ -47,7 +47,6 @@ class Security implements SecurityInterface
     {
         $token = base64_encode( openssl_random_pseudo_bytes(32));
         Service::get('session')->_csrf = $token;
-        setcookie('_csrf', $token, time() + 1800); //seconds per 30 minutes
 
         return $token;
     }
@@ -75,10 +74,9 @@ class Security implements SecurityInterface
     {
         $request = Service::get('request');
         $postToken = $request->post('_csrf');
-        $cookieToken = $request->cookie('_csrf');
         $sessionToken = Service::get('session')->_csrf;
 
-        if (($postToken == $sessionToken) && ($cookieToken == $sessionToken)) {
+        if ($postToken == $sessionToken) {
             return true;
         }
 

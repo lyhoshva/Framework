@@ -5,9 +5,6 @@ namespace Framework\Router;
 use Framework\DI\Service;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\NotAuthException;
-use Framework\Request\Request;
-use ReflectionClass;
-use ReflectionMethod;
 
 /**
  * Class Router
@@ -18,18 +15,18 @@ class Router implements RouterInteface
     /**
      * @var array Routes map
      */
-    protected static $map = array();
+    protected static $map = [];
     /**
      * @var array Contains current route
      */
-    protected $current_route = array();
+    protected $current_route = [];
 
     /**
      * Router constructor.
      *
      * @param array $routing_map
      */
-    public function __construct($routing_map = array())
+    public function __construct($routing_map = [])
     {
         self::$map = $routing_map;
     }
@@ -57,6 +54,8 @@ class Router implements RouterInteface
             $pattern = $this->prepare($route);
 
             if (preg_match($pattern, $url, $params)) {
+                if (empty($route['methods'])
+                    || in_array($request->getMethod(), (array)$route['methods'])) {
                 $this->current_route = $route;
                 $this->current_route['_name'] = $key;
                 
@@ -72,6 +71,7 @@ class Router implements RouterInteface
                 }
 
                 break;
+                }
             }
 
         }

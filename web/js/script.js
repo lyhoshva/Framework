@@ -40,4 +40,16 @@ $(document).ready(function () {
                     'We have some problems =(. Please, try again later.</div>');
             });
     }
+
+    $('a[data-method="POST"]').on('click', function (event) {
+        event.preventDefault();
+        var form = $('<form></form>');
+
+        form.attr('method', 'post');
+        form.attr('action', $(this).attr('href'));
+        form.append('<input type="hidden" name="_csrf" value="' + $('meta[name="_csrf"]').attr('content') + '">');
+
+        $('body').append(form);
+        form.submit();
+    });
 });

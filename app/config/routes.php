@@ -27,9 +27,10 @@ return [
         'pattern'    => '/products/delete/{id}',
         'controller' => 'Shop\\Controller\\ProductController',
         'action'     => 'delete',
+        'methods'    => ['POST'],
         'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
         ],
     ],
     'product'           => [
@@ -65,39 +66,44 @@ return [
         'pattern'    => '/manufacturers/delete/{id}',
         'controller' => 'Shop\\Controller\\ManufacturerController',
         'action'     => 'delete',
+        'methods'    => ['POST'],
         'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
         ],
     ],
     'add_to_cart' => [
         'pattern'    => '/cart/add/{id}',
         'controller' => 'Shop\\Controller\\CartController',
         'action'     => 'add',
+        'methods'    => ['POST'],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
         ],
     ],
     'clear_cart' => [
         'pattern'    => '/cart/clear',
         'controller' => 'Shop\\Controller\\CartController',
         'action'     => 'clear',
+        'methods'    => ['POST'],
     ],
     'cart_delete' => [
         'pattern'    => '/cart/delete/{id}',
         'controller' => 'Shop\\Controller\\CartController',
         'action'     => 'delete',
+        'methods'    => ['POST'],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
         ],
     ],
     'cart_set_count' => [
         'pattern'    => '/cart/set/{id}/{count}',
         'controller' => 'Shop\\Controller\\CartController',
         'action'     => 'setProductCount',
+        'methods'    => ['POST'],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
-            'count' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
+            'count' => '\d+',
         ],
     ],
     'cart_list' => [
@@ -117,7 +123,7 @@ return [
         'action'     => 'update',
         'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
         ],
     ],
     'order_list' => [
@@ -126,7 +132,7 @@ return [
         'action'     => 'list',
         'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
         ],
     ],
     'order_show' => [
@@ -135,7 +141,7 @@ return [
         'action'     => 'show',
         'security'   => [Roles::ROLE_ADMIN],
         '_requirements' => [
-            'id' => '\d+', //TODO Add Method POST
+            'id' => '\d+',
         ],
     ],
     'signup'         => [
@@ -146,11 +152,11 @@ return [
     'login'          => [
         'pattern'    => '/login',
         'controller' => 'Shop\\Controller\\SecurityController',
-        'action'     => 'login', //TODO Add Method POST
+        'action'     => 'login',
     ],
     'logout'         => [
         'pattern'    => '/logout',
         'controller' => 'Shop\\Controller\\SecurityController',
-        'action'     => 'logout', //TODO Add Method POST
+        'action'     => 'logout',
     ],
 ];

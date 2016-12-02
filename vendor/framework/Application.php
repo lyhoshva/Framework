@@ -131,7 +131,7 @@ class Application
     /**
      * Render error view
      *
-     * @param $e
+     * @param $e Exception
      * @return Response
      */
     protected function renderError($e)

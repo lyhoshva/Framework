@@ -61,5 +61,6 @@ use Shop\Model\Roles;
         </tr>
         </tbody>
     </table>
-    <a href="<?= $this->generateRoute('add_to_cart', ['id' => $product->getId()]) ?>" class="btn btn-success pull-right">Add to cart</a>
+    <a href="<?= $this->generateRoute('add_to_cart', ['id' => $product->getId()]) ?>"
+       class="btn btn-success pull-right" data-method="POST">Add to cart</a>
 </div>
