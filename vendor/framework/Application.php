@@ -13,6 +13,7 @@ use Framework\Exception\InvalidInterfaceException;
 use Framework\Exception\InvalidTokenException;
 use Framework\Exception\NotAuthException;
 use Framework\Exception\UndefinedServiceException;
+use Framework\Response\Formatter;
 use Framework\Response\Response;
 use ReflectionClass;
 
@@ -23,7 +24,7 @@ use ReflectionClass;
 class Application
 {
     public $config;
-    public $response_format = Response::FORMAT_HTML;
+    public $response_format = Formatter::FORMAT_HTML;
 
     /**
      * Application constructor.
@@ -69,10 +70,6 @@ class Application
                 }
             } else {
                 throw new HttpNotFoundException('Route Not Found');
-            }
-
-            if (!($response instanceof Response)) {
-                throw new BadResponseTypeException();
             }
 
         } catch(HttpNotFoundException $e) {

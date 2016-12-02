@@ -10,11 +10,6 @@ use Framework\Exception\BadResponseTypeException;
  */
 class Response implements ResponseInterface
 {
-    const FORMAT_RAW = 'raw';
-    const FORMAT_JSON = 'json';
-    const FORMAT_HTML = 'html';
-    const FORMAT_REDIRECT = 'redirect';
-
     public $body;
     protected $code;
 
@@ -111,9 +106,9 @@ class Response implements ResponseInterface
     protected function getFormatters()
     {
         return [
-            self::FORMAT_RAW => 'Framework\Response\RawFormatter',
-            self::FORMAT_JSON => 'Framework\Response\JsonFormatter',
-            self::FORMAT_HTML => 'Framework\Response\HtmlFormatter',
+            Formatter::FORMAT_RAW => 'Framework\Response\RawFormatter',
+            Formatter::FORMAT_JSON => 'Framework\Response\JsonFormatter',
+            Formatter::FORMAT_HTML => 'Framework\Response\HtmlFormatter',
         ];
     }
 
@@ -175,7 +170,7 @@ class Response implements ResponseInterface
         if ($code < 300 || $code > 307) {
             throw new BadResponseTypeException('Incorrect redirect code ' . $code);
         }
-        Service::get('app')->response_format = self::FORMAT_RAW;
+        Service::get('app')->response_format = Formatter::FORMAT_RAW;
         $this->setHeader('Location', $uri);
         $this->body = ' ';
         $this->code = $code;

@@ -11,6 +11,7 @@ namespace Shop\Controller;
 use Framework\Controller\Controller;
 use Framework\DI\Service;
 use Framework\Exception\HttpNotFoundException;
+use Framework\Response\Formatter;
 use Framework\Response\Response;
 use Shop\Model\Cart;
 use Shop\Model\Product;
@@ -69,7 +70,7 @@ class CartController extends Controller
         $cart = new Cart();
 
         $cart->setProductCount($product, $count);
-        Service::get('app')->response_format = Response::FORMAT_JSON;
+        Service::get('app')->response_format = Formatter::FORMAT_JSON;
 
         return [
             'product_price' => $cart->getProductPrice($product),

@@ -11,8 +11,13 @@ namespace Framework\Response;
 
 abstract class Formatter implements FormatterInterface
 {
+    const FORMAT_RAW = 'raw';
+    const FORMAT_JSON = 'json';
+    const FORMAT_HTML = 'html';
+
     /**
      * Convert response to defined format
+     * @param ResponseInterface $response
      */
     public function prepare(ResponseInterface $response)
     {
