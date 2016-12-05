@@ -20,9 +20,11 @@ class ProductController extends Controller
     public function listAction()
     {
         $products = Product::getRepository()->findAll();
+        $manufacturers = Manufacturer::getRepository()->findAll();
 
         return $this->render('list', [
             'products' => $products,
+            'manufacturers' => $manufacturers,
         ]);
     }
 

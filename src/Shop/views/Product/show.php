@@ -26,37 +26,37 @@ use Shop\Model\Roles;
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Свойство</th>
-            <th>Значение</th>
+            <th>Attribute</th>
+            <th>Value</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Дисплей</td>
+            <td>Display</td>
             <td><?= $product->getDisplay() ?>″</td>
         </tr>
         <tr>
-            <td>Камера</td>
+            <td>Camera</td>
             <td><?= $product->getCamera() ?> Mpx</td>
         </tr>
         <tr>
-            <td>Память</td>
+            <td>Memory</td>
             <td><?= $product->getMemory() ?> Mb</td>
         </tr>
         <tr>
-            <td>Процессор</td>
+            <td>Processor</td>
             <td><?= $product->getProcessor() ?></td>
         </tr>
         <tr>
-            <td>Количество SIM</td>
-            <td><?= $product->getSimCount() ?> шт.</td>
+            <td>SIM Count</td>
+            <td><?= $product->getSimCount() ?> </td>
         </tr>
         <tr>
-            <td>Производитель</td>
+            <td>Manufacturer</td>
             <td><?= $product->getManufacturer()->getName() ?></td>
         </tr>
         <tr>
-            <td>Цена</td>
+            <td>Price</td>
             <td>$ <?= $product->getPrice() ?></td>
         </tr>
         </tbody>
