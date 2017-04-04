@@ -1,2 +1,6 @@
-/app/config
-/.idea
+/app/config/config.php
+/app/cache
+/composer.phar
+/.idea/
+/vendor
+!/vendor/framework

@@ -21,19 +21,19 @@ body {
     padding-top: 5px;
 }
 
-.form-signin {
+.form-signup {
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
 }
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
+.form-signup .form-signup-heading,
+.form-signup .checkbox {
     margin-bottom: 10px;
 }
-.form-signin .checkbox {
+.form-signup .checkbox {
     font-weight: normal;
 }
-.form-signin .form-control {
+.form-signup .form-control {
     position: relative;
     height: auto;
     -webkit-box-sizing: border-box;
@@ -42,15 +42,15 @@ body {
     padding: 10px;
     font-size: 16px;
 }
-.form-signin .form-control:focus {
+.form-signup .form-control:focus {
     z-index: 2;
 }
-.form-signin input[type="email"] {
+.form-signup input[type="email"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
-.form-signin input[type="password"] {
+.form-signup input[type="password"] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -116,4 +116,14 @@ div[data-role="editor-toolbar"] {
 
 .has-error #editor{
     border-color: #a94442;
+}
+
+.product_preview__image{
+    max-height: 200px;
+    max-width: 100%;
+}
+
+.product__image{
+    max-width: 100%;
+    max-height: 100%;
 }
